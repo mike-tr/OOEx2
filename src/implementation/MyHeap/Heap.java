@@ -20,10 +20,11 @@ public class Heap<T extends IHeapNode> {
         items = (T[])new IHeapNode[arrSize];
     }
     
-    public static final int HeapifiedUp = 1;
-    public static final int HeapifiedDown = -1;
-    public static final int NOCHANGE = 0;
-    public static final int INVALID_REQUEST = -2;
+    public static final int HEAPIFIED_UP = 1;
+    public static final int HEAPIFIED_DOWN = -1;
+    public static final int NO_CHANGE = 0;
+    public static final int OLD_MEMBER = -2;
+    public static final int NOT_IN_HEAP = -3;
 
     public Heap(int size){
         arrSize = size;
@@ -98,14 +99,21 @@ public class Heap<T extends IHeapNode> {
         }
         // we mark the node to be out of heap.
         first.setHeap(permission,null);
+        first.setIndex(permission, OLD_MEMBER);
         boundUp = (used - 1) / 2 - 1;
         return first;
     }
 
-    public void addOrUpdate(T target, double priority){
-        if(updatePriority(target, priority) == -1){
-            add(target, priority);
+    public int increasePriority(T target, double priority){
+        if(target.getHeap() != this){
+            return NOT_IN_HEAP;
         }
+        if(target.getPriority() > priority){
+            target.setPriority(permission, priority);
+            heapifyUp(target);
+            return HEAPIFIED_UP;
+        }
+        return NO_CHANGE;
     }
 
     public int updatePriority(T target, double priority){
@@ -117,17 +125,17 @@ public class Heap<T extends IHeapNode> {
         // return 0, if failed
         // return -1, if node not in heap.
         if(target.getHeap() != this){
-            return -2;
+            return NOT_IN_HEAP;
         }else if(target.getPriority() > priority){
             target.setPriority(permission, priority);
             heapifyUp(target);
-            return 1;
+            return HEAPIFIED_UP;
         }else if(target.getPriority() < priority){
             target.setPriority(permission, priority);
             heapifyDown(target);
-            return -1;
+            return HEAPIFIED_DOWN;
         }
-        return 0;
+        return NO_CHANGE;
     }
 
     private void swap(T node1, T node2){

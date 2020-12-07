@@ -3,7 +3,7 @@ import java.util.Collection;
 /**
  * This interface represents a directional weighted graph.
  * The interface has a road-system or communication network in mind - 
- * and should support a large number of nodes (over 100,000).
+ * and should support a large number of Nodes (over 100,000).
  * The implementation should be based on an efficient compact representation 
  * (should NOT be based on a n*n matrix).
  *
@@ -40,23 +40,23 @@ public interface directed_weighted_graph {
 	public void connect(int src, int dest, double w);
 	/**
 	 * This method returns a pointer (shallow copy) for the
-	 * collection representing all the nodes in the graph. 
+	 * collection representing all the Nodes in the graph.
 	 * Note: this method should run in O(1) time.
 	 * @return Collection<node_data>
 	 */
 	public Collection<node_data> getV();
 	/**
 	 * This method returns a pointer (shallow copy) for the
-	 * collection representing all the edges getting out of 
-	 * the given node (all the edges starting (source) at the given node). 
+	 * collection representing all the Edges getting out of
+	 * the given node (all the Edges starting (source) at the given node).
 	 * Note: this method should run in O(k) time, k being the collection size.
 	 * @return Collection<edge_data>
 	 */
 	public Collection<edge_data> getE(int node_id);
 	/**
 	 * Deletes the node (with the given ID) from the graph -
-	 * and removes all edges which starts or ends at this node.
-	 * This method should run in O(k), V.degree=k, as all the edges should be removed.
+	 * and removes all Edges which starts or ends at this node.
+	 * This method should run in O(k), V.degree=k, as all the Edges should be removed.
 	 * @return the data of the removed node (null if none). 
 	 * @param key
 	 */
@@ -69,13 +69,13 @@ public interface directed_weighted_graph {
 	 * @return the data of the removed edge (null if none).
 	 */
 	public edge_data removeEdge(int src, int dest);
-	/** Returns the number of vertices (nodes) in the graph.
+	/** Returns the number of vertices (Nodes) in the graph.
 	 * Note: this method should run in O(1) time. 
 	 * @return
 	 */
 	public int nodeSize();
 	/** 
-	 * Returns the number of edges (assume directional graph).
+	 * Returns the number of Edges (assume directional graph).
 	 * Note: this method should run in O(1) time.
 	 * @return
 	 */

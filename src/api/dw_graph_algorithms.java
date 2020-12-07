@@ -45,7 +45,7 @@ public interface dw_graph_algorithms {
      */
     public double shortestPathDist(int src, int dest);
     /**
-     * returns the the shortest path between src to dest - as an ordered List of nodes:
+     * returns the the shortest path between src to dest - as an ordered List of Nodes:
      * src--> n1-->n2-->...dest
      * see: https://en.wikipedia.org/wiki/Shortest_path_problem
      * Note if no such path --> returns null;

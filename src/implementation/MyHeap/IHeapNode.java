@@ -46,11 +46,18 @@ public abstract class IHeapNode {
         onUpdatePriority(priority);
     }
 
-    public final int tryUpdatePriority(double priority){
+    public final int increasePriority(double priority){
+        if(heap != null){
+            return heap.increasePriority(this, priority);
+        }
+        return Heap.NOT_IN_HEAP;
+    }
+
+    public final int updatePriority(double priority){
         if(heap != null){
             return heap.updatePriority(this, priority);
         }
-        return Heap.INVALID_REQUEST;
+        return Heap.NOT_IN_HEAP;
     }
 
     protected abstract void onUpdatePriority(double priority);

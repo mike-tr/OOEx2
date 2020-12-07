@@ -2,7 +2,7 @@ package api;
 
 /**
  * This class represents a position on the graph (a relative position
- * on an edge - between two consecutive nodes).
+ * on an edge - between two consecutive Nodes).
  */
 public interface edge_location {
     /**
