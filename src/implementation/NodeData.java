@@ -5,14 +5,14 @@ import api.node_data;
 
 public class NodeData implements node_data {
     private int id;
-    private Pos pos;
+    private GeoPos pos;
     private String info;
     private int tag;
     private double weight;
 
     public NodeData(int id){
         this.id = id;
-        this.pos = new Pos();
+        this.pos = new GeoPos();
     }
 
     public NodeData(node_data node){
@@ -37,7 +37,7 @@ public class NodeData implements node_data {
 
     @Override
     public void setLocation(geo_location p) {
-        this.pos = new Pos(p);
+        this.pos = new GeoPos(p);
     }
 
     @Override

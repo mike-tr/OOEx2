@@ -2,28 +2,33 @@ package implementation;
 
 import api.geo_location;
 
-public class Pos implements geo_location {
+public class GeoPos implements geo_location {
     double x,y,z;
 
-    public Pos(){
+    public GeoPos(){
         this(0,0,0);
     }
 
-    public Pos(double x, double y, double z){
+    public GeoPos(double x, double y, double z){
         this.x = x;
         this.y = y;
         this.z = z;
     }
 
-    public static Pos fromString(String string){
+    @Override
+    public String toString() {
+        return "x = " + x + ", y = " + y + ", z = " + z;
+    }
+
+    public static GeoPos fromString(String string){
         String[] group = string.split(",");
         double x = Double.parseDouble(group[0]);
         double y = Double.parseDouble(group[1]);
         double z = Double.parseDouble(group[2]);
-        return new Pos(x,y,z);
+        return new GeoPos(x,y,z);
     }
 
-    public Pos(geo_location p){
+    public GeoPos(geo_location p){
         this.x = p.x();
         this.y = p.y();
         this.z = p.z();

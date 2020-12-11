@@ -5,10 +5,10 @@ import api.dw_graph_algorithms;
 import api.edge_data;
 import api.node_data;
 import implementation.MyHeap.Heap;
+import implementation.utilities.InvertedGraph;
 import implementation.utilities.JsonGraph;
 
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 public class DWGraph_Algo implements dw_graph_algorithms{
 
@@ -38,6 +38,55 @@ public class DWGraph_Algo implements dw_graph_algorithms{
 
     @Override
     public boolean isConnected() {
+        int first = graph.getV().iterator().next().getKey();
+        if(directionalConnection(first, graph)){
+            directed_weighted_graph inverted = new InvertedGraph(graph);
+            return directionalConnection(first, inverted);
+        }
+        return false;
+    }
+
+    public boolean directionalConnection(int start, directed_weighted_graph graph){
+        node_data startn = graph.getNode(start);
+        if(startn == null){
+            return false;
+        }
+
+        int size = graph.nodeSize();
+        if(size <= 1){
+            return true;
+        }
+        if(graph.edgeSize() < size-1){
+            return false;
+        }
+
+        for (node_data node: graph.getV()) {
+            node.setTag(0);
+        }
+        ArrayDeque<node_data> open = new ArrayDeque<>();
+        open.add(startn);
+        size--;
+        while (open.size() > 0){
+            node_data current = open.pollFirst();
+            if(size == 0){
+
+                return true;
+            }
+
+            Collection<edge_data> neighbours = graph.getE(current.getKey());
+            if(neighbours.size() == 0){
+                return false;
+            }
+            for (edge_data edge: neighbours) {
+                node_data ni = graph.getNode(edge.getDest());
+                if(ni.getTag() == 0){
+                    ni.setTag(1);
+                    open.add(ni);
+                    size--;
+                }
+            }
+        }
+
         return false;
     }
 

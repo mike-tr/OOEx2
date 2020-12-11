@@ -4,6 +4,7 @@ import api.node_data;
 import implementation.DWGraph_Algo;
 import implementation.DWGraph_DS;
 import implementation.NodeData;
+import implementation.utilities.InvertedGraph;
 import implementation.utilities.JsonGraph;
 import org.junit.Test;
 
@@ -11,12 +12,62 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Random;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class DWGraph_AlgoTest {
     private static Random _rand;
     private static long _seed;
+
+    @Test(timeout = 5000)
+    public void testIsConnectedTime() {
+        int v = 10000 * 10, e = v - 1;
+        directed_weighted_graph graph = graph_creator(v, e);
+        DWGraph_Algo algo = new DWGraph_Algo(graph);
+        assertFalse(algo.isConnected());
+        for (int i = 1; i < v; i++) {
+            graph.connect(i-1, i, 5);
+            graph.connect(v-i, v-i-1, 5);
+        }
+        assertTrue(algo.isConnected());
+    }
+
+    @Test
+    public void testIsConnected() {
+        int v = 100;
+        directed_weighted_graph graph = graph_creator(v, 0);
+        for (int i = 1; i < v; i++) {
+            graph.connect(i-1, i, 1);
+        }
+        DWGraph_Algo algo = new DWGraph_Algo(graph);
+        assertTrue(algo.directionalConnection(0, graph));
+        graph.removeEdge(8,9);
+        assertFalse(algo.directionalConnection(0, graph));
+        graph.connect(8,9,1);
+        assertFalse(algo.isConnected());
+
+        for (int i = 1; i < v; i++) {
+            graph.connect(v-i, v-i-1, 1);
+        }
+        assertTrue(algo.isConnected());
+    }
+
+    @Test
+    public void testIsConnected2() {
+        int v = 6;
+        directed_weighted_graph graph = graph_creator(v, 0);
+        DWGraph_Algo algo = new DWGraph_Algo(graph);
+        graph.connect(0, 2, 1);
+        graph.connect(2, 4, 1);
+        graph.connect(4, 3, 1);
+        graph.connect(3, 5, 1);
+        graph.connect(5, 1, 1);
+        assertTrue(algo.directionalConnection(0, graph));
+        assertFalse(algo.directionalConnection(0, new InvertedGraph(graph)));
+        assertFalse(algo.isConnected());
+
+        graph.connect(1, 0, 1);
+        assertTrue(algo.isConnected());
+    }
 
     @Test
     public void testShortestPath(){

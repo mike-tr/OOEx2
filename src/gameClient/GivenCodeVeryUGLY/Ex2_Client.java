@@ -1,4 +1,4 @@
-package gameClient;
+package gameClient.GivenCodeVeryUGLY;
 
 import Server.Game_Server_Ex2;
 import api.directed_weighted_graph;

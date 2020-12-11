@@ -15,6 +15,14 @@ public class EdgeData implements edge_data {
         this.weight = weight;
     }
 
+    public static EdgeData invertedEdge(edge_data data){
+        return new EdgeData(data.getDest(), data.getSrc(), data.getWeight());
+    }
+
+    public static boolean areInverted(edge_data a1, edge_data a2){
+        return a1.getDest() == a2.getSrc() && a1.getSrc() == a2.getDest() && a1.getWeight() == a2.getWeight();
+    }
+
     @Override
     public int hashCode() {
         return (src * 10 + 1) * dest + dest;
@@ -34,6 +42,11 @@ public class EdgeData implements edge_data {
             return same((EdgeData)obj);
         }
         return false;
+    }
+
+    @Override
+    public String toString() {
+        return "src : " + src + " weight :" + weight + " dest : " + dest;
     }
 
     public boolean same(edge_data data){

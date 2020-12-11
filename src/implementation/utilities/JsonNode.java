@@ -3,7 +3,7 @@ package implementation.utilities;
 import api.geo_location;
 import api.node_data;
 import implementation.NodeData;
-import implementation.Pos;
+import implementation.GeoPos;
 
 import java.io.Serializable;
 
@@ -19,7 +19,7 @@ public class JsonNode implements Serializable {
 
     public NodeData toNodeData(){
         NodeData convert = new NodeData(id);
-        convert.setLocation(Pos.fromString(pos));
+        convert.setLocation(GeoPos.fromString(pos));
         return convert;
     }
 

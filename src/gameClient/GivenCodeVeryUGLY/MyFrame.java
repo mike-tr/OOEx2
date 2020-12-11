@@ -1,4 +1,4 @@
-package gameClient;
+package gameClient.GivenCodeVeryUGLY;
 
 import api.directed_weighted_graph;
 import api.edge_data;

@@ -3,6 +3,7 @@ package implementation;
 import api.directed_weighted_graph;
 import api.edge_data;
 import api.node_data;
+import implementation.utilities.InvertedGraph;
 import implementation.utilities.JsonEdge;
 import implementation.utilities.JsonGraph;
 import implementation.utilities.JsonNode;
@@ -12,9 +13,9 @@ import java.util.HashMap;
 import java.util.HashSet;
 
 public class DWGraph_DS implements directed_weighted_graph{
-    private HashMap<Integer, node_data> nodes = new HashMap<>();
-    private HashMap<Integer, HashMap<Integer,edge_data>> edges = new HashMap<>();
-    private HashMap<Integer, HashSet<Integer>> flipped = new HashMap<>();
+    protected HashMap<Integer, node_data> nodes = new HashMap<>();
+    protected HashMap<Integer, HashMap<Integer,edge_data>> edges = new HashMap<>();
+    protected HashMap<Integer, HashSet<Integer>> flipped = new HashMap<>();
     private int edgeSize = 0;
     private int mc = 0;
 
@@ -27,6 +28,29 @@ public class DWGraph_DS implements directed_weighted_graph{
 
     public DWGraph_DS(JsonGraph graphJson){
         reloadFromJson(graphJson);
+    }
+
+    @Override
+    public String toString() {
+        return "nodes : " + nodeSize() + " , edges :" + edgeSize() + ", mc : " + getMC();
+    }
+
+    public HashMap<Integer, node_data> getNodes(InvertedGraph.Inverter key){
+        // this method is Not use-able for any non InvertedGraph object.
+        return nodes;
+    }
+
+    public HashMap<Integer, HashMap<Integer,edge_data>> getInvertedEdges(InvertedGraph.Inverter key){
+        // this method is Not use-able for any non InvertedGraph object.
+        HashMap<Integer, HashMap<Integer,edge_data>> inverted = new HashMap<>();
+        for (Integer dest: flipped.keySet()) {
+            HashMap<Integer,edge_data> ne = new HashMap<>();
+            for (Integer src: flipped.get(dest)) {
+                ne.put(src, EdgeData.invertedEdge(getEdge(src,dest)));
+            }
+            inverted.put(dest, ne);
+        }
+        return inverted;
     }
 
     private void reloadFromJson(JsonGraph graph){
