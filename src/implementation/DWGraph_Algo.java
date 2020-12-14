@@ -11,7 +11,6 @@ import implementation.utilities.JsonGraph;
 import java.util.*;
 
 public class DWGraph_Algo implements dw_graph_algorithms{
-
     directed_weighted_graph graph;
     public DWGraph_Algo(){
         graph = new DWGraph_DS();
@@ -46,48 +45,51 @@ public class DWGraph_Algo implements dw_graph_algorithms{
         return false;
     }
 
-    public boolean directionalConnection(int start, directed_weighted_graph graph){
-        node_data startn = graph.getNode(start);
-        if(startn == null){
-            return false;
-        }
+    public synchronized boolean directionalConnection(int start, directed_weighted_graph graph){
+        synchronized (this) {
 
-        int size = graph.nodeSize();
-        if(size <= 1){
-            return true;
-        }
-        if(graph.edgeSize() < size-1){
-            return false;
-        }
-
-        for (node_data node: graph.getV()) {
-            node.setTag(0);
-        }
-        ArrayDeque<node_data> open = new ArrayDeque<>();
-        open.add(startn);
-        size--;
-        while (open.size() > 0){
-            node_data current = open.pollFirst();
-            if(size == 0){
-
-                return true;
-            }
-
-            Collection<edge_data> neighbours = graph.getE(current.getKey());
-            if(neighbours.size() == 0){
+            node_data startn = graph.getNode(start);
+            if (startn == null) {
                 return false;
             }
-            for (edge_data edge: neighbours) {
-                node_data ni = graph.getNode(edge.getDest());
-                if(ni.getTag() == 0){
-                    ni.setTag(1);
-                    open.add(ni);
-                    size--;
+
+            int size = graph.nodeSize();
+            if (size <= 1) {
+                return true;
+            }
+            if (graph.edgeSize() < size - 1) {
+                return false;
+            }
+
+            for (node_data node : graph.getV()) {
+                node.setTag(0);
+            }
+            ArrayDeque<node_data> open = new ArrayDeque<>();
+            open.add(startn);
+            size--;
+            while (open.size() > 0) {
+                node_data current = open.pollFirst();
+                if (size == 0) {
+
+                    return true;
+                }
+
+                Collection<edge_data> neighbours = graph.getE(current.getKey());
+                if (neighbours.size() == 0) {
+                    return false;
+                }
+                for (edge_data edge : neighbours) {
+                    node_data ni = graph.getNode(edge.getDest());
+                    if (ni.getTag() == 0) {
+                        ni.setTag(1);
+                        open.add(ni);
+                        size--;
+                    }
                 }
             }
-        }
 
-        return false;
+            return false;
+        }
     }
 
     @Override
@@ -111,48 +113,56 @@ public class DWGraph_Algo implements dw_graph_algorithms{
     }
 
 
-    public WPathNode getShortestPath(int src, int dest){
-        if(graph.getNode(dest) == null){
+    public synchronized WPathNode getShortestPath(int src, int dest){
+        synchronized (this) {
+            if (graph.getNode(dest) == null) {
+                return null;
+            }
+
+            node_data first = graph.getNode(src);
+            if (first == null) {
+                return null;
+            }
+
+            if (src == dest) {
+                var p = new WPathNode(first);
+                var p2 = new WPathNode(first, p);
+                return p2;
+            }
+
+            for (node_data node : graph.getV()) {
+                node.setTag(Heap.NOT_IN_HEAP);
+            }
+
+            Heap<WPathNode> open = new Heap<>();
+            open.add(new WPathNode(first), 0);
+            while (open.size() > 0) {
+                WPathNode current = open.poll();
+                int key = current.getNode().getKey();
+                if (key == dest) {
+                    return current;
+                }
+                double distance = current.getDistance();
+                for (edge_data edge : graph.getE(key)) {
+                    node_data node = graph.getNode(edge.getDest());
+                    if (node.getTag() == Heap.OLD_MEMBER) {
+                        continue;
+                    }
+
+                    if (node.getTag() == Heap.NOT_IN_HEAP) {
+                        WPathNode pn = new WPathNode(node, current);
+                        open.add(pn, distance + edge.getWeight());
+                        continue;
+                    }
+
+                    WPathNode pw = open.getAt(node.getTag());
+                    if (open.increasePriority(pw, distance + edge.getWeight()) == Heap.HEAPIFIED_UP) {
+                        pw.setParent(current);
+                    }
+                }
+            }
             return null;
         }
-
-        node_data first = graph.getNode(src);
-        if(first == null){
-            return null;
-        }
-
-        for (node_data node: graph.getV()) {
-            node.setTag(Heap.NOT_IN_HEAP);
-        }
-
-        Heap<WPathNode> open = new Heap<>();
-        open.add(new WPathNode(first), 0);
-        while (open.size() > 0){
-            WPathNode current = open.poll();
-            int key = current.getNode().getKey();
-            if(key == dest){
-                return current;
-            }
-            double distance = current.getDistance();
-            for (edge_data edge: graph.getE(key)) {
-                node_data node = graph.getNode(edge.getDest());
-                if(node.getTag() == Heap.OLD_MEMBER){
-                    continue;
-                }
-
-                if(node.getTag() == Heap.NOT_IN_HEAP){
-                    WPathNode pn = new WPathNode(node, current);
-                    open.add(pn, distance + edge.getWeight());
-                    continue;
-                }
-
-                WPathNode pw = open.getAt(node.getTag());
-                if(open.increasePriority(pw, distance + edge.getWeight()) == Heap.HEAPIFIED_UP){
-                    pw.setParent(current);
-                }
-            }
-        }
-        return null;
     }
 
     @Override

@@ -1,7 +1,6 @@
 package gameClient.Graphics;
 
-import gameClient.utilities.Pokemon;
-import gameClient.utilities.PokemonGameHandler;
+import gameClient.GameData.PokemonGameHandler;
 import gameClient.utilities.PosTransformer;
 
 import java.awt.*;
@@ -20,15 +19,18 @@ public class AgentDrawer {
     }
 
     public void draw(Graphics g){
-        for (Pokemon pokemon: gameHandler.getPokemons()) {
-            if(pokemon.getType() == 1){
-                g.setColor(upPok);
-            }else{
-                g.setColor(downPok);
-            }
+        for (var agent: gameHandler.getAgents()) {
             ((Graphics2D)g).setStroke(new BasicStroke(3));
-            var pos = transformer.transform(pokemon.getPos());
-            g.drawOval(pos.x - size, pos.y - size, size * 2, size * 2);
+            var pos = transformer.transformD(agent.getPos());
+            g.setColor(Color.magenta);
+            g.drawString("AgentBasic : "+agent.getId(), (int)pos.x + 25, (int)pos.y-2);
+            g.drawOval((int)pos.x - size, (int)pos.y - size, size * 2, size * 2);
+
+            if(agent.getVelocity() != null) {
+                var look = transformer.transformD(agent.getDest_pos());
+                GraphDrawer.drawArrow(g, pos, look, 20, 10);
+                agent.updatePosition();
+            }
         }
     }
 }

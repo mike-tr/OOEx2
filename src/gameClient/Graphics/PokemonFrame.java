@@ -1,6 +1,6 @@
 package gameClient.Graphics;
 
-import gameClient.utilities.PokemonGameHandler;
+import gameClient.GameData.PokemonGameHandler;
 
 import javax.swing.*;
 import java.awt.*;
@@ -28,7 +28,7 @@ public class PokemonFrame extends JFrame implements LevelLoaderPanel.levelPicked
         this.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
-                running = false;
+                stop();
             }
         });
 
@@ -42,7 +42,7 @@ public class PokemonFrame extends JFrame implements LevelLoaderPanel.levelPicked
         this.setLayout(cLayout);
         add(mainPane);
 
-        createGame(0,width, height);
+        createGame(11,width, height); // you have [0,23] games
         //createLevelLoader();
         //showLoader();
 
@@ -86,8 +86,9 @@ public class PokemonFrame extends JFrame implements LevelLoaderPanel.levelPicked
             while (running) {
                 repaint();
 
+                // Try to always sleep exactly the time needed.
                 time -= System.currentTimeMillis();
-                Thread.sleep(sleep - time);
+                Thread.sleep(sleep + time);
                 time = System.currentTimeMillis();
             }
         }catch (Exception e){
@@ -102,6 +103,11 @@ public class PokemonFrame extends JFrame implements LevelLoaderPanel.levelPicked
 
     public boolean running(){
         return running;
+    }
+
+    public void stop(){
+        running = false;
+        game.stop();
     }
 
     @Override

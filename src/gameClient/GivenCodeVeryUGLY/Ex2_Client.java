@@ -76,7 +76,7 @@ public class Ex2_Client implements Runnable{
 			if(dest==-1) {
 				dest = nextNode(gg, src);
 				game.chooseNextEdge(ag.getID(), dest);
-				System.out.println("Agent: "+id+", val: "+v+"   turned to node: "+dest);
+				System.out.println("AgentBasic: "+id+", val: "+v+"   turned to node: "+dest);
 			}
 		}
 	}
@@ -119,7 +119,7 @@ public class Ex2_Client implements Runnable{
 			int rs = ttt.getInt("agents");
 			System.out.println(info);
 			System.out.println(game.getPokemons());
-			int src_node = 0;  // arbitrary node, you should start at one of the pokemon
+			int src_node = 0;  // arbitrary node, you should start at one of the currentTarget
 			ArrayList<CL_Pokemon> cl_fs = Arena.json2Pokemons(game.getPokemons());
 			for(int a = 0;a<cl_fs.size();a++) { Arena.updateEdge(cl_fs.get(a),gg);}
 			for(int a = 0;a<rs;a++) {

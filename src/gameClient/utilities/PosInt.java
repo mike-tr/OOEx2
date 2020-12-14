@@ -1,5 +1,7 @@
 package gameClient.utilities;
 
+import implementation.Pos3D;
+
 public class PosInt {
     /*
     simply pos x,y
@@ -19,6 +21,10 @@ public class PosInt {
 
     public PosInt(Pos original){
         this(original.x, original.y);
+    }
+
+    public PosInt(Pos3D original){
+        this(original.x(), original.y());
     }
 
     @Override

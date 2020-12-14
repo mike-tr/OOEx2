@@ -38,7 +38,7 @@ public class CL_Agent {
 			try {
 				// "GameServer":{"graph":"A0","pokemons":3,"agents":1}}
 				line = new JSONObject(json);
-				JSONObject ttt = line.getJSONObject("Agent");
+				JSONObject ttt = line.getJSONObject("AgentBasic");
 				int id = ttt.getInt("id");
 				if(id==this.getID() || this.getID() == -1) {
 					if(this.getID() == -1) {_id = id;}
@@ -63,7 +63,7 @@ public class CL_Agent {
 		public int getSrcNode() {return this._curr_node.getKey();}
 		public String toJSON() {
 			int d = this.getNextNode();
-			String ans = "{\"Agent\":{"
+			String ans = "{\"AgentBasic\":{"
 					+ "\"id\":"+this._id+","
 					+ "\"value\":"+this._value+","
 					+ "\"src\":"+this._curr_node.getKey()+","

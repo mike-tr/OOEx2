@@ -4,6 +4,7 @@ import api.directed_weighted_graph;
 import api.edge_data;
 import api.node_data;
 import gameClient.utilities.Pos;
+import gameClient.utilities.PosInt;
 import gameClient.utilities.PosTransformer;
 
 import java.awt.*;
@@ -13,7 +14,7 @@ public class GraphDrawer {
     private PosTransformer transformer;
 
     private static int size = 6;
-    public static final Color typeP1 = Color.red; // start > end
+    public static final Color typeP1 = Color.red; // start < end
     public static final Color typeN1 = Color.orange; // start > end
 
     Color colorNodes = Color.blue;
@@ -48,11 +49,10 @@ public class GraphDrawer {
                 // type == 2 => n1 > n2, big to small
                 if(n1 > n2) {
                     g.setColor(typeN1); // type == -1
-                    drawArrow(g, new Pos(pos), new Pos(p2), n1 - n2);
                 }else{
                     g.setColor(typeP1); // type == 1
-                    drawArrow(g, new Pos(pos), new Pos(p2), n2 - n1);
                 }
+                drawArrow(g, new Pos(pos), new Pos(p2), String.format("%.2f", edge.getWeight()));
 
             }
             g.setColor(colorNodes);
@@ -61,41 +61,42 @@ public class GraphDrawer {
         }
     }
 
-    public void drawArrow(Graphics g, Pos p1, Pos p2, int d){
-        Pos dir = d > 0 ? p2.sub(p1) : p1.sub(p2);
-
-        Pos p;
-        if(d > 0){
-            p = p1.add(dir.scale(0.8));
-            p1 = p.sub(dir.normalize().scale(7));
-            drawArrowLine(g, (int)p1.x, (int)p1.y, (int)p.x, (int)p.y, 10, 10);
-        }else{
-            p = p2.add(dir);
-            p2 = p.sub(dir.normalize().scale(7));
-            drawArrowLine(g, (int)p2.x, (int)p2.y, (int)p.x, (int)p.y, 10, 10);
-        }
+    public void drawArrow(Graphics g, Pos p1, Pos p2, String string){
+        Pos dir = p2.sub(p1);
+        var p = p1.add(dir.scale(0.9));
+        var p21 = p.sub(dir.normalize().scale(7));
+        drawArrowLine(g, new PosInt(p21), new PosInt(p), 10, 10);
+        p = p1.add(dir.scale(0.8));
+        g.drawString(string, (int)p.x + size, (int)p.y + 6 * size);
     }
 
-    private void drawArrowLine(Graphics g, int x1, int y1, int x2, int y2, int d, int h) {
+    public static void drawArrow(Graphics g, Pos p1, Pos p2, int d, int h) {
         // this code is from stack overflow as iam too lazy to write a code, that makes arrows.
         // i just don't remember how to find perpendicular vector, with i need in order to create arrows.
-        int dx = x2 - x1, dy = y2 - y1;
+        p2 = p2.sub(p1).normalize().scale(d).add(p1);
+        drawArrowLine(g, new PosInt(p1), new PosInt(p2), d, h);
+    }
+
+    public static void drawArrowLine(Graphics g, PosInt p1, PosInt p2, int d, int h) {
+        // this code is from stack overflow as iam too lazy to write a code, that makes arrows.
+        // i just don't remember how to find perpendicular vector, with i need in order to create arrows.
+        int dx = p2.x - p1.x, dy = p2.y - p1.y;
         double D = Math.sqrt(dx*dx + dy*dy);
         double xm = D - d, xn = xm, ym = h, yn = -h, x;
         double sin = dy / D, cos = dx / D;
 
-        x = xm*cos - ym*sin + x1;
-        ym = xm*sin + ym*cos + y1;
+        x = xm*cos - ym*sin + p1.x;
+        ym = xm*sin + ym*cos + p1.y;
         xm = x;
 
-        x = xn*cos - yn*sin + x1;
-        yn = xn*sin + yn*cos + y1;
+        x = xn*cos - yn*sin + p1.x;
+        yn = xn*sin + yn*cos + p1.y;
         xn = x;
 
-        int[] xpoints = {x2, (int) xm, (int) xn};
-        int[] ypoints = {y2, (int) ym, (int) yn};
+        int[] xpoints = {p2.x, (int) xm, (int) xn};
+        int[] ypoints = {p2.y, (int) ym, (int) yn};
 
-        g.drawLine(x1, y1, x2, y2);
+        //g.drawLine(p1.x, p1.y, p2.x, p2.y);
         g.fillPolygon(xpoints, ypoints, 3);
     }
 }

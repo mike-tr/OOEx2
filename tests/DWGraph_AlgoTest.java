@@ -32,6 +32,21 @@ public class DWGraph_AlgoTest {
     }
 
     @Test
+    public void testPathToItself() {
+        int v = 100;
+        directed_weighted_graph graph = graph_creator(v, 0);
+        DWGraph_Algo algo = new DWGraph_Algo(graph);
+
+        assertEquals(0, algo.shortestPathDist(0,0));
+        var path = algo.shortestPath(0,0);
+
+        for (var node: path) {
+            assertEquals(node.getKey(), 0);
+        }
+        assertEquals(path.size(), 2);
+    }
+
+    @Test
     public void testIsConnected() {
         int v = 100;
         directed_weighted_graph graph = graph_creator(v, 0);

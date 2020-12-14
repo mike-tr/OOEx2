@@ -39,4 +39,15 @@ public class PosTransformer {
 
         return new PosInt((int)(nx), (int)(ny));
     }
+
+    public Pos transformD(geo_location location){
+        return transformD(location.x(), location.y());
+    }
+
+    public Pos transformD(double x, double y){
+        double nx = (x - min_x) * scaleX + addX;
+        double ny = (y - min_y) * scaleY + addY;
+
+        return new Pos((int)nx, (int)ny);
+    }
 }

@@ -105,7 +105,7 @@ public class Heap<T extends IHeapNode> {
     }
 
     public int increasePriority(T target, double priority){
-        if(target.getHeap() != this){
+        if(target == null || target.getHeap() != this){
             return NOT_IN_HEAP;
         }
         if(target.getPriority() > priority){
@@ -119,8 +119,8 @@ public class Heap<T extends IHeapNode> {
     public int updatePriority(T target, double priority){
         // this is mainly for the PathFinding,
         // if the node is in the heap.
-        // we try to update the priority, if its a "better" one,
-        // we update it.
+        // we try to updateFromJson the priority, if its a "better" one,
+        // we updateFromJson it.
         // return 1 if successful.
         // return 0, if failed
         // return -1, if node not in heap.
@@ -150,7 +150,7 @@ public class Heap<T extends IHeapNode> {
     }
 
     private void heapifyUp(T target){
-        // update item, look upwards.
+        // updateFromJson item, dest_pos upwards.
         // this takes O(logn);
         int index = target.getIndex();
         if(index == 0){
@@ -165,7 +165,7 @@ public class Heap<T extends IHeapNode> {
     }
 
     private void heapifyDown(T target){
-        // update item, look downwards.
+        // updateFromJson item, dest_pos downwards.
         // this takes O(logn);
         int index = target.getIndex();
         if(index > boundUp){

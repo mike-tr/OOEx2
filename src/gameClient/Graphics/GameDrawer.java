@@ -2,7 +2,7 @@ package gameClient.Graphics;
 
 import api.directed_weighted_graph;
 import api.node_data;
-import gameClient.utilities.PokemonGameHandler;
+import gameClient.GameData.PokemonGameHandler;
 import gameClient.utilities.PosTransformer;
 
 import javax.swing.*;
@@ -19,6 +19,7 @@ public class GameDrawer extends JPanel {
 
     GraphDrawer graphDrawer;
     PokemonDrawer pokemonDrawer;
+    AgentDrawer agentDrawer;
     public GameDrawer(PokemonGameHandler gameData, int width, int height){
         this.width = width;
         this.height = height;
@@ -38,6 +39,7 @@ public class GameDrawer extends JPanel {
         generateTransformer(gameData.getGraph());
         graphDrawer = new GraphDrawer(gameData.getGraph(), transformer);
         pokemonDrawer = new PokemonDrawer(gameData, transformer);
+        agentDrawer = new AgentDrawer(gameData, transformer);
     }
 
     public void generateTransformer(directed_weighted_graph graph){
@@ -65,6 +67,7 @@ public class GameDrawer extends JPanel {
         if(transformer != null) {
             graphDrawer.draw(g);
             pokemonDrawer.draw(g);
+            agentDrawer.draw(g);
         }
     }
 

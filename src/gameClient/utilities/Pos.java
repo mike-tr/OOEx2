@@ -1,5 +1,7 @@
 package gameClient.utilities;
 
+import implementation.Pos3D;
+
 public class Pos {
     /*
     This class provide x,y as doubles, as such we can do much more stuff
@@ -16,6 +18,15 @@ public class Pos {
     public Pos(PosInt p){
         this.x = p.x;
         this.y = p.y;
+    }
+
+    public Pos(Pos3D p){
+        this.x = p.x();
+        this.y = p.y();
+    }
+
+    public Pos add(PosInt b){
+        return new Pos(x + b.x, y + b.y);
     }
 
     public Pos add(Pos b){
