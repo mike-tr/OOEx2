@@ -3,9 +3,13 @@ package gameClient.GameData;
 import api.directed_weighted_graph;
 import api.dw_graph_algorithms;
 import api.edge_data;
+import api.node_data;
 import implementation.Pos3D;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 public abstract class AgentBasic implements Runnable {
@@ -26,7 +30,7 @@ public abstract class AgentBasic implements Runnable {
     protected edge_data edge;
     protected PokemonGameHandler gameHandler;
     private State state = State.idle;
-    private double travelTime = 0;
+    protected List<node_data> path = new ArrayList<>();
     public static Object agentW8Stop = new Object();
     public AgentBasic(PokemonGameHandler gameHandler, int id, int src, Pokemon pokemon){
         this.id = id;
@@ -47,10 +51,14 @@ public abstract class AgentBasic implements Runnable {
     public final void run() {
         waitForever(agentW8Stop);
         while (gameHandler.getGame().isRunning()) {
-//            System.out.println(this + " :: " + gameHandler.getTick());
+            //System.out.println(this + " :: " + gameHandler.getTick());
 //            System.out.println(currentTarget);
             switch (state) {
                 case idle:
+                    if(velocity != null) {
+                        changeState(State.moving);
+                        continue;
+                    }
                     onIdle();
                     break;
                 case moving:
@@ -59,11 +67,11 @@ public abstract class AgentBasic implements Runnable {
                     onMoving();
                     break;
             }
-            sleepFor(25);
+            sleepFor(15);
         }
     }
 
-    protected abstract void nextEdge();
+    protected abstract void recalculatePath(int times);
     /**
      * when the agent has stopped, a.k.a he is on the Node without destination
      */
@@ -72,25 +80,37 @@ public abstract class AgentBasic implements Runnable {
      * when we are moving towards a node
      */
     private final void onMoving(){
-        if(state == State.onFinal){
+        if(velocity == null) {
+            changeState(State.idle);
+            return;
+        }
+
+        if(!hasTarget()){
+            getNextTarget();
+            return;
+        }
+
+        if(src == currentTarget.getSrc()){
             if(onFinalEdge()){
                 return;
             }
         }
 
         if(targetNotMine()){
-            //System.out.println("???");
             removeTarget();
             getNextTarget();
             return;
         }
 
-
-        waitFor(this, 50);
+        waitFor(this, 25);
         // we landed on a cross road.
         if(velocity == null) {
-            nextEdge();
-            gameHandler.doMove();
+            sleepFor(10);
+            if(velocity == null) {
+                changeState(State.idle);
+            }
+            //recalculatePath();
+            //gameHandler.doMove();
         }
     }
 
@@ -103,27 +123,14 @@ public abstract class AgentBasic implements Runnable {
     protected abstract void getNextTarget();
 
     private boolean onFinalEdge(){
-        if(velocity == null) {
-            nextEdge();
-            gameHandler.doMove();
-            return true;
-        }
-
-        if(!hasTarget()){
-            changeState(State.moving);
-            return false;
-        }if(currentTarget.getSrc() != src){
-            changeState(State.moving);
-            return false;
-        }else if (pos.checkExtraClose(currentTarget.getPos())) {
+        if (pos.checkExtraClose(currentTarget.getPos(), 2)) {
             System.out.println("Eating");
             //System.out.println(currentTarget);
-            sleepFor(10);
             gameHandler.forceMove();
-            sleepFor(10);
+            sleepFor(5);
             currentTarget = null;
             changeState(State.moving);
-            //getNextTarget();
+            getNextTarget();
         }
         return true;
     }
@@ -138,15 +145,16 @@ public abstract class AgentBasic implements Runnable {
 
 
         src = agentObj.getInt("src");
-        var old = dest;
         var dest = agentObj.getInt("dest");
         var speed = agentObj.getDouble("speed");
         var p = Pos3D.fromString(agentObj.getString("pos"));
-
         if(this.speed != speed || this.dest != dest){
             this.speed = speed;
             this.dest = dest;
             if(dest == - 1){
+                if(currentTarget != null && edge != null){
+                    currentTarget.setAgent(this, currentTarget.getDistance() - edge.getWeight());
+                }
                 pos = p;
                 velocity = null;
                 return;
@@ -228,6 +236,10 @@ public abstract class AgentBasic implements Runnable {
         }
     }
 
+    protected int getDestiny(){
+        return hasTarget() ? currentTarget.getDest() : src;
+    }
+
     protected Pokemon getTarget(){
         return currentTarget;
     }
@@ -262,12 +274,18 @@ public abstract class AgentBasic implements Runnable {
     }
 
     public void evaluateTarget(){
-        if(hasTarget()){
-            if(currentTarget.getLastUpdate() != gameHandler.movesMade()){
-                System.out.println("INVALID POKEMON");
-                currentTarget = null;
-            }
+        if(!hasTarget()){
+            getNextTarget();
+            return;
         }
+        var target = currentTarget;
+        currentTarget.setAgent(null, 0);
+        getNextTarget();
+        if(currentTarget == target){
+            return;
+        }
+
+        //System.out.println("Found Better one!");
     }
 
     public void wakeMeUp(){

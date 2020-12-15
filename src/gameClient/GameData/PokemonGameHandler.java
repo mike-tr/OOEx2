@@ -14,6 +14,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashMap;
 
 public class PokemonGameHandler implements Runnable{
     private int tick;
@@ -30,6 +31,7 @@ public class PokemonGameHandler implements Runnable{
     private boolean running = true;
     public PokemonGameHandler(int level){
         game = Game_Server_Ex2.getServer(level);
+        game.login(323363838);
         String g = game.getGraph();
         graph = new DWGraph_DS(JsonGraph.fromJson(g));
         graph_algorithms = new DWGraph_Algo(graph);
@@ -62,11 +64,11 @@ public class PokemonGameHandler implements Runnable{
             long t = System.currentTimeMillis();
             while (game.isRunning()) {
                 updateTick();
-                Thread.sleep(25);
+                Thread.sleep(5);
                 if(move){
                     move();
                 }
-                Thread.sleep(75);
+                Thread.sleep(15);
             }
             wakeupAll();
             t = System.currentTimeMillis() - t;
@@ -84,6 +86,7 @@ public class PokemonGameHandler implements Runnable{
 
     int last = -10;
     int last2 = -10;
+    private HashMap<Integer, Integer> memory = new HashMap<>();
     public synchronized void forceMove(){
         if(tick == last){
             return;
@@ -105,8 +108,8 @@ public class PokemonGameHandler implements Runnable{
 
     boolean move = false;
     public synchronized void doMove(){
-        if(last2 + 3 > tick){
-            last2 -= 2;
+        if(last2 + 10 * agents.size() > tick){
+            last2 -= (5 - agents.size());
             return;
         }
         move = true;

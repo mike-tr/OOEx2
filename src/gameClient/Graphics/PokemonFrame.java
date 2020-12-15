@@ -6,6 +6,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.ArrayList;
 
 public class PokemonFrame extends JFrame implements LevelLoaderPanel.levelPickedListener, Runnable {
     /*
@@ -20,6 +21,8 @@ public class PokemonFrame extends JFrame implements LevelLoaderPanel.levelPicked
     GameDrawer gamePanel;
     LevelLoaderPanel loader;
     PokemonGameHandler game;
+
+    ArrayList<Integer> levels = new ArrayList<>();
     public PokemonFrame(String name, int width, int height){
         super(name);
         this.setResizable(true);
@@ -42,7 +45,7 @@ public class PokemonFrame extends JFrame implements LevelLoaderPanel.levelPicked
         this.setLayout(cLayout);
         add(mainPane);
 
-        createGame(11,width, height); // you have [0,23] games
+        createGame(23,width, height); // you have [0,23] games
         //createLevelLoader();
         //showLoader();
 

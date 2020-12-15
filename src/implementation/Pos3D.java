@@ -3,7 +3,7 @@ package implementation;
 import api.geo_location;
 
 public class Pos3D implements geo_location {
-    public static final double EPS1 = 0.001, EPS2 = 0.0003;
+    public static final double EPS1 = 0.001, EPS2 = 0.0003, EPS3 = 0.005;
 
     double x,y,z;
 
@@ -82,8 +82,10 @@ public class Pos3D implements geo_location {
     public boolean checkExtraClose(Pos3D other, int precision){
         if(precision == 0) {
             return sub(other).getSqrtMagnitude() < EPS1 * EPS1; // if the two point extra close
-        }else{
+        }else if(precision == 1){
             return sub(other).getSqrtMagnitude() < EPS2 * EPS2;
+        }else{
+            return sub(other).getSqrtMagnitude() < EPS3 * EPS3;
         }
     }
 
