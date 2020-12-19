@@ -138,7 +138,7 @@ public class DWGraph_DS implements directed_weighted_graph{
      */
     @Override
     public void connect(int src, int dest, double w) {
-        if(src == dest || w < 0){
+        if(src == dest || w <= 0){
             return;
         }
         if(getNode(src) != null){

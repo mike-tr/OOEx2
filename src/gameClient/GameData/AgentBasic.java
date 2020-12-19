@@ -352,6 +352,10 @@ public abstract class AgentBasic implements Runnable {
         return "Agent : " + id;
     }
 
+    public double getValue() {
+        return value;
+    }
+
     @Override
     public String toString() {
         return description() + " state : " + state + " has target : " + (currentTarget != null);

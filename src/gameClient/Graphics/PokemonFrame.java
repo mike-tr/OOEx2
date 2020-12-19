@@ -18,7 +18,8 @@ public class PokemonFrame extends JFrame implements LevelLoaderPanel.levelPicked
 
     CardLayout cLayout;
     JPanel mainPane;
-    GameDrawer gamePanel;
+    //GameDrawer gamePanel;
+    MainGamePain gamePanel;
     LevelLoaderPanel loader;
     PokemonGameData game;
 
@@ -64,7 +65,7 @@ public class PokemonFrame extends JFrame implements LevelLoaderPanel.levelPicked
             showLoader();
         }
 
-        //createGame(23, width,height);
+        //createGame(0,-1, width,height);
 
         //createGame(0,width, height); // you have [0,23] games
 
@@ -84,7 +85,7 @@ public class PokemonFrame extends JFrame implements LevelLoaderPanel.levelPicked
             mainPane.remove(gamePanel);
         }
         game = new PokemonGameData(level, id, this);
-        gamePanel = new GameDrawer(game, width, height);
+        gamePanel = new MainGamePain(game, width, height);
         mainPane.add("Game", gamePanel);
     }
 

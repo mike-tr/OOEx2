@@ -37,6 +37,7 @@ public class PokemonGameData implements Runnable{
     private PokaGroupCreator pokaGroupCreator;
 
     private GameData gameData;
+    private boolean initialized = false;
     /**
      * This class is basically the game, it would communicate with the server.
      * start the game, initialize everything and call updates.
@@ -68,8 +69,13 @@ public class PokemonGameData implements Runnable{
         System.out.println("------------ Start Game --------------");
         tick = 0;
         movesMade = 0;
+        initialized = true;
         game.startGame();
         new Thread(this).start();
+    }
+
+    public boolean isInitialized(){
+        return initialized;
     }
 
     public directed_weighted_graph getGraph() {
@@ -84,6 +90,9 @@ public class PokemonGameData implements Runnable{
         return gameData;
     }
 
+    public GameData getAndUpdateGameData(){
+        return gameData = new GameData(game.toString());
+    }
     /**
      * the main loop it basically calling move but at "intervals" each time some agent requested,
      * a "move" but not an urgent one we would call move, we have some basic couldown on the "move" ability

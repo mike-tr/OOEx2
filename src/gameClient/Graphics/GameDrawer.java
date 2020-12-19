@@ -30,23 +30,24 @@ public class GameDrawer extends JPanel {
      * @param width the default width of the screen
      * @param height the default height of the screen
      */
-    public GameDrawer(PokemonGameData gameData, int width, int height){
+    public GameDrawer(PokemonGameData gameData, JPanel main, int width, int height){
         this.width = width;
         this.height = height;
         this.gameData = gameData;
 
         this.setPreferredSize(new Dimension(width, height));
-        this.addComponentListener(new ComponentAdapter() {
+        generateTransformer(gameData.getGraph());
+        main.addComponentListener(new ComponentAdapter() {
             public void componentResized(ComponentEvent componentEvent) {
                 GameDrawer.this.width = getWidth();
                 GameDrawer.this.height = getHeight();
+                System.out.println(getWidth() + " , " + getHeight());
 
                 if(transformer != null){
                     transformer.applyResize(getWidth(), getHeight());
                 }
             }
         });
-        generateTransformer(gameData.getGraph());
         graphDrawer = new GraphDrawer(gameData.getGraph(), transformer);
         pokemonDrawer = new PokemonDrawer(gameData, transformer);
         agentDrawer = new AgentDrawer(gameData, transformer);
