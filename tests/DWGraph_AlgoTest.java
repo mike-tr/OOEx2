@@ -8,9 +8,7 @@ import implementation.utilities.InvertedGraph;
 import implementation.utilities.JsonGraph;
 import org.junit.Test;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Random;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -97,6 +95,23 @@ public class DWGraph_AlgoTest {
             g.connect(i-1,i, 1);
         }
         assertEquals(10,algo.shortestPathDist(0, 10));
+
+    }
+
+    public void test(){
+        directed_weighted_graph g = graph_creator(1000,1000);
+        dw_graph_algorithms algo = new DWGraph_Algo(g);
+
+        double distance = algo.shortestPathDist(0,100);
+        List<node_data> path = algo.shortestPath(0,100);
+        boolean is_fully_connected = algo.isConnected();
+
+        directed_weighted_graph copy = algo.copy();
+        algo.init(copy);
+        algo.save("filename");
+        algo.load("filename");
+
+        directed_weighted_graph loaded = algo.getGraph();
     }
 
     @Test
