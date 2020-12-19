@@ -2,6 +2,9 @@ package implementation;
 
 import api.edge_data;
 
+/**
+ * edge inside the graph, its pretty self explanatory
+ */
 public class EdgeData implements edge_data {
     private int src;
     private int dest;

@@ -1,14 +1,14 @@
 package gameClient.GameData;
 
-public class Agent extends AgentV1 {
+public class Agent extends AgentVG {
     /**
      * This class is just responsible for choosing the Agent implementation, in case we have multiple of them.
-     * @param gameHandler
-     * @param id
-     * @param src
-     * @param pokemon
+     * @param gameHandler the game manager
+     * @param id the id of the agent
+     * @param src the starting position ( default if no pokemon )
+     * @param pokemon the target pokemon
      */
-    public Agent(PokemonGameHandler gameHandler, int id, int src, Pokemon pokemon){
+    public Agent(PokemonGameData gameHandler, int id, int src, Pokemon pokemon){
         super(gameHandler, id, src, pokemon);
     }
 }

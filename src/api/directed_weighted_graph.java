@@ -40,23 +40,23 @@ public interface directed_weighted_graph {
 	public void connect(int src, int dest, double w);
 	/**
 	 * This method returns a pointer (shallow copy) for the
-	 * collection representing all the Nodes in the graph.
+	 * collection representing overlapping the Nodes in the graph.
 	 * Note: this method should run in O(1) time.
 	 * @return Collection<node_data>
 	 */
 	public Collection<node_data> getV();
 	/**
 	 * This method returns a pointer (shallow copy) for the
-	 * collection representing all the Edges getting out of
-	 * the given node (all the Edges starting (source) at the given node).
+	 * collection representing overlapping the Edges getting out of
+	 * the given node (overlapping the Edges starting (source) at the given node).
 	 * Note: this method should run in O(k) time, k being the collection size.
 	 * @return Collection<edge_data>
 	 */
 	public Collection<edge_data> getE(int node_id);
 	/**
 	 * Deletes the node (with the given ID) from the graph -
-	 * and removes all Edges which starts or ends at this node.
-	 * This method should run in O(k), V.degree=k, as all the Edges should be removed.
+	 * and removes overlapping Edges which starts or ends at this node.
+	 * This method should run in O(k), V.degree=k, as overlapping the Edges should be removed.
 	 * @return the data of the removed node (null if none). 
 	 * @param key
 	 */

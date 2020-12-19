@@ -9,6 +9,9 @@ import api.geo_location;
  */
 
 public class Range2Range {
+	/**
+	 * IAM NOT USING THIS
+	 */
 	private Range2D _world, _frame;
 	
 	public Range2Range(Range2D w, Range2D f) {

@@ -3,31 +3,42 @@ package gameClient.GameData;
 import java.util.ArrayList;
 
 public class AgentV1 extends AgentBasic {
-    public AgentV1(PokemonGameHandler gameHandler, int id, int src, Pokemon pokemon){
+    /**
+     * OLD implementation of agent this one uses straight Path finding, its worse in most cases
+     * @param gameHandler game manager
+     * @param id agent id
+     * @param src initial src
+     * @param pokemon initial pokemon
+     */
+    public AgentV1(PokemonGameData gameHandler, int id, int src, Pokemon pokemon){
         super(gameHandler, id, src, pokemon);
     }
 
-    @Override
-    protected void recalculatePath(int times) {
-        path = algo.shortestPath(src, getTarget().getSrc());
-        gameHandler.getGame().chooseNextEdge(id, path.get(0).getKey());
-    }
-
+    /**
+     * implement next move when agent on "node" and not moving
+     */
     @Override
     protected void onIdle() {
         if(velocity == null) {
-            if(targetNotMine()){
-                removeTarget();
-                getNextTarget();
-            } else if(getTarget().getSrc() == src){
+            //System.out.println(gameHandler.getPokemons());
+            if(updateTarget()){
+                return;
+            }
+            if(getTarget().getSrc() == src){
+                //System.out.println("this");
                 gameHandler.getGame().chooseNextEdge(id, getTarget().getDest());
                 gameHandler.doMove();
+                sleepFor(5);
             } else{
                 path = algo.shortestPath(src, getTarget().getSrc());
+                //System.out.println("RR "  + path + " -- " + getTarget().getSrc() + " ||| " + getTarget());
+                //System.out.println(gameHandler.getPokemons());
+                //System.out.println(gameHandler.getGame().getPokemons());
                 if(gameHandler.getGame().chooseNextEdge(id, path.get(1).getKey()) > 0){
                     return;
                 }
                 gameHandler.doMove();
+                sleepFor(5);
             }
 
             //recalculatePath();
@@ -36,6 +47,9 @@ public class AgentV1 extends AgentBasic {
         }
     }
 
+    /**
+     * get the next target
+     */
     @Override
     protected void getNextTarget() {
         var distance = Double.POSITIVE_INFINITY;
@@ -51,24 +65,9 @@ public class AgentV1 extends AgentBasic {
                 next = pokemon;
             }
 
-//            boolean close = false;
-//            for (var agent: gameHandler.getAgents()) {
-//                if(agent != this){
-//                    //System.out.println(pokemon.getPos().getSqrtDistance(agent.pos));
-//                    if(Math.abs(pokemon.getPos().x()-agent.pos.x()) < 0.003){
-//                        //System.out.println(Math.abs(pokemon.getPos().x()-agent.pos.x()) + " " + agent +  " " + pokemon);
-//                        close = true;
-//                        continue;
-//                    }
-//                }
-//            }
-//            if(close){
-//                continue;
-//            }
-
             var dist = algo.shortestPathDist(src, pokemon.getSrc());
             if(dist < distance){
-                if(pokemon.hasAgent() && pokemon.getDistance() - 3 < dist){
+                if(pokemon.hasAgent() && pokemon.getAgentId() != id && pokemon.getDistance() - 3 < dist){
                     continue;
                 }
                 next = pokemon;
@@ -78,7 +77,8 @@ public class AgentV1 extends AgentBasic {
 
         if(next != null){
             setTarget(next, distance);
-            recalculatePath(0);
+            path = algo.shortestPath(src, getTarget().getSrc());
+            gameHandler.getGame().chooseNextEdge(id, path.get(1).getKey());
         }
     }
 }

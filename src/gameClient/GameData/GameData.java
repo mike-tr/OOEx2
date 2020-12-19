@@ -10,6 +10,10 @@ public class GameData {
     public int level = 0;
     public int grade = 0;
 
+    /**
+     * class that reads the server data and transform it into a readable class
+     * @param json the json string
+     */
     public GameData(String json){
         try {
             JSONObject data = new JSONObject(json);

@@ -2,16 +2,20 @@ package implementation.MyHeap;
 
 import java.util.Arrays;
 
-public class Heap<T extends IHeapNode> {
-    // this is my own implementation for a heap,
-    // i can assure you i made it my self.
-    // this should be a proper heap, but mostly its fine tuned for the path finding algorithm.
+/**
+ *  this is my own implementation for a heap,
+ *  i can assure you i made it my self.
+ *  this should be a proper heap, but mostly its fine tuned for the path finding algorithm.
+ *
+ *  Java does not have a heap implementation that support heapify up and down,
+ *  and i also need a way to quickly "take out" items from the heap,
+ *  in this case i save the heap index, as the tag inside the node_info, with lets me
+ *  a very quick way of updating an existing item in the heap
+ *  this is the main reason why this heap is much much better, then the PriorityQueue
+ * @param <T> the object we will sort on must be IHeapNode so we can induce index from it
+ */
 
-    // Java does not have a heap implementation that support heapify up and down,
-    // and i also need a way to quickly "take out" items from the heap,
-    // in this case i save the heap index, as the tag inside the node_info, with lets me
-    // a very quick way of updating an existing item in the heap
-    // this is the main reason why this heap is much much better, then the PriorityQueue
+public class Heap<T extends IHeapNode> {
     private T[] items;
     int boundUp = 0;
     int used = 0;
@@ -64,7 +68,7 @@ public class Heap<T extends IHeapNode> {
     }
 
     public void add(T item, double priority){
-        // for now no protection at all
+        // for now no protection at overlapping
         if(item.getHeap() != null){
             return;
         }

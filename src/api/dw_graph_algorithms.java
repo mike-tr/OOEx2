@@ -4,7 +4,7 @@ import java.util.List;
  * This interface represents a Directed (positive) Weighted Graph Theory Algorithms including:
  * 0. clone(); (copy)
  * 1. init(graph);
- * 2. isConnected(); // strongly (all ordered pais connected)
+ * 2. isConnected(); // strongly (overlapping ordered pais connected)
  * 3. double shortestPathDist(int src, int dest);
  * 4. List<node_data> shortestPath(int src, int dest);
  * 5. Save(file); // JSON file
@@ -32,7 +32,7 @@ public interface dw_graph_algorithms {
     public directed_weighted_graph copy();
     /**
      * Returns true if and only if (iff) there is a valid path from each node to each
-     * other node. NOTE: assume directional graph (all n*(n-1) ordered pairs).
+     * other node. NOTE: assume directional graph (overlapping n*(n-1) ordered pairs).
      * @return
      */
     public boolean isConnected();

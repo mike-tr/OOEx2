@@ -54,9 +54,9 @@ public class DWGraph_AlgoTest {
             graph.connect(i-1, i, 1);
         }
         DWGraph_Algo algo = new DWGraph_Algo(graph);
-        assertTrue(algo.directionalConnection(0, graph));
+        assertTrue(algo.checkIfStartConnectedToAll(0, graph));
         graph.removeEdge(8,9);
-        assertFalse(algo.directionalConnection(0, graph));
+        assertFalse(algo.checkIfStartConnectedToAll(0, graph));
         graph.connect(8,9,1);
         assertFalse(algo.isConnected());
 
@@ -76,8 +76,8 @@ public class DWGraph_AlgoTest {
         graph.connect(4, 3, 1);
         graph.connect(3, 5, 1);
         graph.connect(5, 1, 1);
-        assertTrue(algo.directionalConnection(0, graph));
-        assertFalse(algo.directionalConnection(0, new InvertedGraph(graph)));
+        assertTrue(algo.checkIfStartConnectedToAll(0, graph));
+        assertFalse(algo.checkIfStartConnectedToAll(0, new InvertedGraph(graph)));
         assertFalse(algo.isConnected());
 
         graph.connect(1, 0, 1);
@@ -183,7 +183,7 @@ public class DWGraph_AlgoTest {
         return ans;
     }
     /**
-     * Simple method for returning an array with all the node_data of the graph,
+     * Simple method for returning an array with overlapping the node_data of the graph,
      * Note: this should be using an  Iterator<node_edge> to be fixed in Ex1
      * @param g
      * @return

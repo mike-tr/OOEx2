@@ -19,6 +19,12 @@ public class GraphDrawer {
 
     Color colorNodes = Color.blue;
     Color colorEdges = Color.blue;
+
+    /**
+     * This class would draw the graph the edges and the overlay text.
+     * @param graph the target graph we must draw
+     * @param transformer the screen transformer object
+     */
     public GraphDrawer(directed_weighted_graph graph, PosTransformer transformer){
         this.graph = graph;
         this.transformer = transformer;

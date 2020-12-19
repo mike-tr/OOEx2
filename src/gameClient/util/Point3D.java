@@ -8,6 +8,9 @@ import api.geo_location;
 import java.io.Serializable;
 
 public class Point3D implements geo_location, Serializable{
+    /**
+     * IAM NOT USING THIS
+     */
 	private static final long serialVersionUID = 1L;
 	/**
      * Simple set of constants - should be defined in a different class (say class Constants).*/

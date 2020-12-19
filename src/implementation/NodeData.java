@@ -3,16 +3,19 @@ package implementation;
 import api.geo_location;
 import api.node_data;
 
+/**
+ * A Node on the graph
+ */
 public class NodeData implements node_data {
     private int id;
-    private Pos3D pos;
+    private Vector3D pos;
     private String info;
     private int tag;
     private double weight;
 
     public NodeData(int id){
         this.id = id;
-        this.pos = new Pos3D();
+        this.pos = new Vector3D();
     }
 
     public NodeData(node_data node){
@@ -37,7 +40,7 @@ public class NodeData implements node_data {
 
     @Override
     public void setLocation(geo_location p) {
-        this.pos = new Pos3D(p);
+        this.pos = new Vector3D(p);
     }
 
     @Override

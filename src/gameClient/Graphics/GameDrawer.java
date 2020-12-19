@@ -2,7 +2,7 @@ package gameClient.Graphics;
 
 import api.directed_weighted_graph;
 import api.node_data;
-import gameClient.GameData.PokemonGameHandler;
+import gameClient.GameData.PokemonGameData;
 import gameClient.utilities.PosTransformer;
 
 import javax.swing.*;
@@ -14,13 +14,20 @@ public class GameDrawer extends JPanel {
     int width, height;
     int x = 0;
     int dir = 5;
-    PokemonGameHandler gameData;
+    PokemonGameData gameData;
     PosTransformer transformer;
 
     GraphDrawer graphDrawer;
     PokemonDrawer pokemonDrawer;
     AgentDrawer agentDrawer;
-    public GameDrawer(PokemonGameHandler gameData, int width, int height){
+
+    /**
+     * This class is responsible for combining all the drawing methods into this one.
+     * @param gameData the gama manager
+     * @param width the default width of the screen
+     * @param height the default height of the screen
+     */
+    public GameDrawer(PokemonGameData gameData, int width, int height){
         this.width = width;
         this.height = height;
         this.gameData = gameData;

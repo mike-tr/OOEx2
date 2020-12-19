@@ -3,26 +3,52 @@ package gameClient.GameData;
 import api.directed_weighted_graph;
 import api.edge_data;
 import api.node_data;
-import implementation.Pos3D;
+import implementation.Vector3D;
 
 import java.util.Iterator;
 
-public class Pokemon {
-    private Pos3D pos;
-    private Pos3D look;
-    private edge_data edge;
-    private double value;
-    private int type;
+public class Pokemon{
+    private Vector3D pos;
+    private Vector3D look;
+    protected edge_data edge;
+    protected double value;
+    protected int type;
     private AgentBasic agent;
     private double distance;
     private int lastUpdate;
-    public Pokemon(directed_weighted_graph graph, Pos3D loc, double value, int type){
+    protected int hash = 0;
+    protected double percentage;
+    protected int initializationTime = -1;
+    protected PokaGroup group;
+    private int id;
+
+    private static int next_id = 0;
+
+    /**
+     * This class would create a pokemon, at the given location, as well as calculating
+     * the pokemon Edge.
+     * @param graph the graph with we are on
+     * @param loc the position
+     * @param value the value of the pokemon
+     * @param type the type
+     * @param moves number of moves made so far
+     */
+    public Pokemon(directed_weighted_graph graph, Vector3D loc, double value, int type, int moves){
         pos = loc;
+        //this.initializationTime = lastUpdate = moves;
         this.value = value;
         this.type = type;
         calculateEdge(graph);
+        id = next_id++;
+        if(next_id > 99){
+            next_id = -99;
+        }
     }
 
+    /**
+     * find the edge the pokemon is located on
+     * @param graph
+     */
     private void calculateEdge(directed_weighted_graph graph){
         Iterator<node_data> itr = graph.getV().iterator();
         while(itr.hasNext()) {
@@ -36,8 +62,12 @@ public class Pokemon {
                 }
 
                 var v2 = graph.getNode(e.getDest());
-                var p1 = new Pos3D(v1.getLocation());
-                var p2 = new Pos3D(v2.getLocation());
+                var p1 = new Vector3D(v1.getLocation());
+                var p2 = new Vector3D(v2.getLocation());
+                if(Vector3D.inRect(p1,p2,pos) == false){
+                    continue;
+                }
+
 
                 var n = p2.sub(p1).normalize();
                 var n2 = p2.sub(pos).normalize();
@@ -45,20 +75,31 @@ public class Pokemon {
                 if(n.checkExtraClose(n2)){
                     look = p2;
                     edge = e;
+                    percentage = p1.sub(pos).getSqrtMagnitude();
+                    hash = edge.getDest() * (edge.getSrc() + 1) + edge.getSrc();
                     return;
                 }
             }
         }
     }
 
+    /**
+     * return the pokemon description
+     * @return agent string data
+     */
     @Override
     public String toString() {
         if(agent == null){
-            return "Pokemon :: edge : " + edge + " :: type - " + type + " :: AgentBasic : none";
+            return "Pokemon-ID : " + id + " :: edge : " + edge + " :: AgentBasic : none";
         }
-        return "Pokemon :: edge : " + edge + " :: type - " + type + " :: AgentBasic :" + agent.getId();
+        return "Pokemon-ID : " + id + " :: edge : " + edge + " :: AgentBasic :" + agent.getId();
     }
 
+    /**
+     * if the pokemon is the same one a.k.a same geo pos, we return true
+     * @param obj the object we comparing too
+     * @return true if equals
+     */
     @Override
     public boolean equals(Object obj) {
         if(obj == this){
@@ -75,9 +116,20 @@ public class Pokemon {
         return false;
     }
 
+    @Override
+    public int hashCode() {
+        return hash;
+    }
+
+    /**
+     * the pokemons are the same if they are on the same geo-location
+     * @param pokemon
+     * @return
+     */
     public boolean same(Pokemon pokemon){
         return this.value == pokemon.value && pos.checkExtraClose(pokemon.pos, 1);
     }
+
 
     public int getSrc(){
         return edge.getSrc();
@@ -99,11 +151,11 @@ public class Pokemon {
         return type;
     }
 
-    public Pos3D getPos() {
+    public Vector3D getPos() {
         return pos;
     }
 
-    public Pos3D getLook(){
+    public Vector3D getLook(){
         return look;
     }
 
@@ -111,6 +163,11 @@ public class Pokemon {
         return distance;
     }
 
+    /**
+     * mark this pokemon as the target of agent.
+     * @param agent
+     * @param distance
+     */
     public void setAgent(AgentBasic agent, double distance){
         this.agent = agent;
         this.distance = distance;
@@ -125,14 +182,37 @@ public class Pokemon {
     }
 
     public AgentBasic agent(){
-        return agent;
+        if(agent != null) {
+            return agent;
+        }
+        return group.getFirst().getAgent();
     }
 
     public void setLastUpdate(int lastUpdate) {
         this.lastUpdate = lastUpdate;
     }
 
+    public boolean isFresh(){
+        return initializationTime == lastUpdate;
+    }
+
     public int getLastUpdate() {
         return lastUpdate;
+    }
+
+    public PokaGroup getGroup() {
+        return group;
+    }
+
+    public void setGroup(PokaGroup group) {
+        this.group = group;
+    }
+
+    public double getPercentage() {
+        return percentage;
+    }
+
+    public int getID(){
+        return id;
     }
 }

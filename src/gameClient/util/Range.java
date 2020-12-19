@@ -5,6 +5,9 @@ package gameClient.util;
  *
  */
 public class Range {
+	/**
+	 * IAM NOT USING THIS
+	 */
 	private double _min, _max;
 	public Range(double min, double max) {
 		set_min(min);

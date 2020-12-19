@@ -10,6 +10,9 @@ import implementation.utilities.JsonGraph;
 
 import java.util.*;
 
+/**
+ * My graph algo implementation
+ */
 public class DWGraph_Algo implements dw_graph_algorithms{
     directed_weighted_graph graph;
     public DWGraph_Algo(){
@@ -20,6 +23,11 @@ public class DWGraph_Algo implements dw_graph_algorithms{
         init(graph);
     }
 
+
+    /**
+     * init graph
+     * @param g
+     */
     @Override
     public void init(directed_weighted_graph g) {
         graph = g;
@@ -30,22 +38,34 @@ public class DWGraph_Algo implements dw_graph_algorithms{
         return graph;
     }
 
+    /**
+     * @return copy of the graph
+     */
     @Override
     public directed_weighted_graph copy() {
         return new DWGraph_DS(graph);
     }
 
+    /**
+     * @return true if fully connected
+     */
     @Override
     public boolean isConnected() {
         int first = graph.getV().iterator().next().getKey();
-        if(directionalConnection(first, graph)){
+        if(checkIfStartConnectedToAll(first, graph)){
             directed_weighted_graph inverted = new InvertedGraph(graph);
-            return directionalConnection(first, inverted);
+            return checkIfStartConnectedToAll(first, inverted);
         }
         return false;
     }
 
-    public synchronized boolean directionalConnection(int start, directed_weighted_graph graph){
+    /**
+     * Return if there is a path between start and every other node.
+     * @param start starting node
+     * @param graph target graph
+     * @return
+     */
+    public synchronized boolean checkIfStartConnectedToAll(int start, directed_weighted_graph graph){
         synchronized (this) {
 
             node_data startn = graph.getNode(start);
@@ -92,12 +112,24 @@ public class DWGraph_Algo implements dw_graph_algorithms{
         }
     }
 
+    /**
+     * return the shortest path distance, between src and dest, returns -1 if no path.
+     * @param src - start node
+     * @param dest - end (target) node
+     * @return distance
+     */
     @Override
     public double shortestPathDist(int src, int dest) {
         WPathNode pathNode = getShortestPath(src,dest);
         return pathNode != null ? pathNode.getDistance() : -1;
     }
 
+    /**
+     * return the path between src and dest, return null if there is no path
+     * @param src - start node
+     * @param dest - end (target) node
+     * @return path
+     */
     @Override
     public List<node_data> shortestPath(int src, int dest) {
         WPathNode pathNode = getShortestPath(src,dest);
@@ -112,7 +144,12 @@ public class DWGraph_Algo implements dw_graph_algorithms{
         return null;
     }
 
-
+    /**
+     * calculate the shortest path return WPATHNODE if path was found.
+     * @param src
+     * @param dest
+     * @return end node Path object
+     */
     public synchronized WPathNode getShortestPath(int src, int dest){
         synchronized (this) {
             if (graph.getNode(dest) == null) {
@@ -165,12 +202,22 @@ public class DWGraph_Algo implements dw_graph_algorithms{
         }
     }
 
+    /**
+     * save graph to file
+     * @param file - the file name (may include a relative path).
+     * @return true if success
+     */
     @Override
     public boolean save(String file) {
         JsonGraph jg = new JsonGraph(graph);
         return jg.saveToFile(file);
     }
 
+    /**
+     * load graph from file
+     * @param file - file name of JSON file
+     * @return true if success
+     */
     @Override
     public boolean load(String file) {
         JsonGraph jg = JsonGraph.fromFile(file);

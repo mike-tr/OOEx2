@@ -72,7 +72,7 @@ public class invertedGraoh_Test {
         return ans;
     }
     /**
-     * Simple method for returning an array with all the node_data of the graph,
+     * Simple method for returning an array with overlapping the node_data of the graph,
      * Note: this should be using an  Iterator<node_edge> to be fixed in Ex1
      * @param g
      * @return

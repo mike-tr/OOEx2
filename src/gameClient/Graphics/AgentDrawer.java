@@ -1,19 +1,25 @@
 package gameClient.Graphics;
 
-import gameClient.GameData.PokemonGameHandler;
+import gameClient.GameData.PokemonGameData;
 import gameClient.utilities.PosTransformer;
 
 import java.awt.*;
 
 public class AgentDrawer {
-    private PokemonGameHandler gameHandler;
+    private PokemonGameData gameHandler;
     private PosTransformer transformer;
 
     Color upPok = Color.red;
     Color downPok = Color.orange;
 
     int size = 15;
-    public AgentDrawer(PokemonGameHandler gameHandler, PosTransformer transformer){
+
+    /**
+     * This class is responsible for taking the gamedata agent's and drawing them.
+     * @param gameHandler the game manager
+     * @param transformer the transformer object
+     */
+    public AgentDrawer(PokemonGameData gameHandler, PosTransformer transformer){
         this.gameHandler = gameHandler;
         this.transformer = transformer;
     }

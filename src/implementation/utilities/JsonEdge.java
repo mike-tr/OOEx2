@@ -2,6 +2,9 @@ package implementation.utilities;
 
 import api.edge_data;
 
+/**
+ * transform edge_data into a json version
+ */
 public class JsonEdge {
     public int src;
     public double w;

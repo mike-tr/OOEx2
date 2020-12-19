@@ -7,7 +7,7 @@ import java.io.Serializable;
  * 2. getInfo(); getGraph(), getAgents(), getPokemon(); // JSON format:
  * 3. locateAgents();
  * 4. start_game()
- * 5. move(); // move all Agents
+ * 5. move(); // move overlapping Agents
  * 6. chooseNextEdge(int agentID, int destNodeID); //main algorithm
  * 7. stop_game()
  * 8. login(long id): (for reporting the results of Ex2)
@@ -26,18 +26,18 @@ public interface game_service extends Serializable{
 	 */
 	default directed_weighted_graph getJava_Graph_Not_to_be_used() {return null;}
 	/**
-	 * Returns a JSON string, representing all Pokemons (fixed bonus coin).
+	 * Returns a JSON string, representing overlapping Pokemons (fixed bonus coin).
 	 * @return
 	 */
 	public String getPokemons();
 	/**
-	 * Returns a JSON string, representing all the Agents.
+	 * Returns a JSON string, representing overlapping the Agents.
 	 * @return
 	 */
 	public String getAgents();
 	/** 
 	 * This method allows the user to add & locate the agents,
-	 * all should be located in order to start a game.   
+	 * overlapping should be located in order to start a game.
 	 * 
 	 * @param start_node - the vertex in the graph from which the agent will start.
 	 * @return
@@ -49,7 +49,7 @@ public interface game_service extends Serializable{
 		 */
 	public long startGame();
 	/**
-	 * Returns the current status of the game (true: is running, false: NOT running).
+	 * Returns the overlapping status of the game (true: is running, false: NOT running).
 	 * @return
 	 */
 	public boolean isRunning();
@@ -73,10 +73,10 @@ public interface game_service extends Serializable{
 	 */
 	public long timeToEnd();
 	/**
-	 * moves all the agents along each edge,
+	 * moves overlapping the agents along each edge,
 	 * if the agent is on the node
 	 * (nothing is done - requires to chooseNextEdge(int id, int next_node)
-	 * @return a JSON like String - representing status of all the agents.
+	 * @return a JSON like String - representing status of overlapping the agents.
 	 */
 	public String move();
 	/**

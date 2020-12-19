@@ -5,12 +5,12 @@ public abstract class IHeapNode {
     private Heap heap;
     private double priority;
 
-    // return parent heap, null if none.
+    // return head heap, null if none.
     public Heap getHeap() {
         return heap;
     }
 
-    // set the parent heap, honestly this should be an inner class but whatever.
+    // set the head heap, honestly this should be an inner class but whatever.
     public final void setHeap(Heap.HeapLock permission, Heap heap) {
         this.heap = heap;
     }

@@ -1,13 +1,12 @@
 package gameClient.utilities;
 
-import implementation.Pos3D;
+import implementation.Vector3D;
 
+/**
+ * This class is Pos2d, in the end iam using way more Vector3D, but it's almost the same
+ * it provides addition multiplication normalization etc...
+ */
 public class Pos {
-    /*
-    This class provide x,y as doubles, as such we can do much more stuff
-    high precision calculations, magnitude, add, subtract, normalize!
-    Hence its impossible to normalize on integers! (well on small number).
-     */
     public double x;
     public double y;
     public Pos(double x, double y){
@@ -20,7 +19,7 @@ public class Pos {
         this.y = p.y;
     }
 
-    public Pos(Pos3D p){
+    public Pos(Vector3D p){
         this.x = p.x();
         this.y = p.y();
     }

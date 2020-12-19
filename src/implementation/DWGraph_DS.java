@@ -12,6 +12,9 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 
+/**
+ * this is a Directed weighted graph implementation
+ */
 public class DWGraph_DS implements directed_weighted_graph{
     protected HashMap<Integer, node_data> nodes = new HashMap<>();
     protected HashMap<Integer, HashMap<Integer,edge_data>> edges = new HashMap<>();
@@ -35,11 +38,21 @@ public class DWGraph_DS implements directed_weighted_graph{
         return "nodes : " + nodeSize() + " , edges :" + edgeSize() + ", mc : " + getMC();
     }
 
+    /**
+     * a method that let create an inverted graph with the exact same node data.
+     * @param key
+     * @return
+     */
     public HashMap<Integer, node_data> getNodes(InvertedGraph.Inverter key){
         // this method is Not use-able for any non InvertedGraph object.
         return nodes;
     }
 
+    /**
+     * returns inverted edges of this graph
+     * @param key
+     * @return
+     */
     public HashMap<Integer, HashMap<Integer,edge_data>> getInvertedEdges(InvertedGraph.Inverter key){
         // this method is Not use-able for any non InvertedGraph object.
         HashMap<Integer, HashMap<Integer,edge_data>> inverted = new HashMap<>();
@@ -53,6 +66,11 @@ public class DWGraph_DS implements directed_weighted_graph{
         return inverted;
     }
 
+    /**
+     * Load this graph from a jsonGraph object
+     * we override everything that was there before.
+     * @param graph
+     */
     private void reloadFromJson(JsonGraph graph){
         nodes = new HashMap<>();
         edges = new HashMap<>();
@@ -66,6 +84,12 @@ public class DWGraph_DS implements directed_weighted_graph{
         }
     }
 
+    /**
+     * returns if two graph are "equal" that is just in edge size and node size,
+     * its not REALLY equal it just has a chance greater then 0.
+     * @param obj
+     * @return
+     */
     @Override
     public boolean equals(Object obj) {
         if(obj == this){
@@ -106,9 +130,15 @@ public class DWGraph_DS implements directed_weighted_graph{
         }
     }
 
+    /**
+     * connect two nodes with an edge, or update the weight of the existing one, doesn't support negative weight!
+     * @param src - the source of the edge.
+     * @param dest - the destination of the edge.
+     * @param w - positive weight representing the cost (aka time, price, etc) between src-->dest.
+     */
     @Override
     public void connect(int src, int dest, double w) {
-        if(src == dest){
+        if(src == dest || w < 0){
             return;
         }
         if(getNode(src) != null){
@@ -138,6 +168,11 @@ public class DWGraph_DS implements directed_weighted_graph{
         return new HashSet<>();
     }
 
+    /**
+     * remove the given node, and all edges into it and out of it.
+     * @param key
+     * @return
+     */
     @Override
     public node_data removeNode(int key) {
         node_data n = getNode(key);

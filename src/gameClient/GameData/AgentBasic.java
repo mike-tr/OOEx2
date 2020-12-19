@@ -4,11 +4,11 @@ import api.directed_weighted_graph;
 import api.dw_graph_algorithms;
 import api.edge_data;
 import api.node_data;
-import implementation.Pos3D;
+import implementation.DWGraph_Algo;
+import implementation.Vector3D;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -21,38 +21,50 @@ public abstract class AgentBasic implements Runnable {
     protected int id, dest, src;
     protected double value;
     protected double speed;
-    protected Pos3D pos;
-    protected Pos3D dest_pos;
-    protected Pos3D velocity;
+    protected Vector3D pos;
+    protected Vector3D dest_pos;
+    protected Vector3D velocity;
     protected directed_weighted_graph graph;
     protected dw_graph_algorithms algo;
     private Pokemon currentTarget;
     protected edge_data edge;
-    protected PokemonGameHandler gameHandler;
+    protected PokemonGameData gameHandler;
     private State state = State.idle;
-    protected List<node_data> path = new ArrayList<>();
+    protected List<node_data> path = null;
     public static Object agentW8Stop = new Object();
-    public AgentBasic(PokemonGameHandler gameHandler, int id, int src, Pokemon pokemon){
+
+    /**
+     * The base for all agent some stuff just do not change, like handeling movement, calculating real position
+     * getting server updated etc...
+     * this class handles all the basic stuff that all agents have in common
+     * @param gameHandler gama manager
+     * @param id agent id
+     * @param src initial src
+     * @param pokemon initial pokemon
+     */
+    public AgentBasic(PokemonGameData gameHandler, int id, int src, Pokemon pokemon){
         this.id = id;
         this.gameHandler = gameHandler;
         this.src = src;
         this.graph = gameHandler.getGraph();
-        this.pos = new Pos3D(graph.getNode(src).getLocation());
-        this.algo = gameHandler.getGraph_algorithms();
+        this.pos = new Vector3D(graph.getNode(src).getLocation());
+        this.algo = new DWGraph_Algo(gameHandler.getGraph_algorithms().copy());
         this.currentTarget = pokemon;
-        pokemon.setAgent(this, 0);
         if(pokemon != null){
             pokemon.setAgent(this, 0);
         }
         new Thread(this).start();
     }
 
+    /**
+     * the main loop of the agent
+     */
     @Override
     public final void run() {
         waitForever(agentW8Stop);
         while (gameHandler.getGame().isRunning()) {
             //System.out.println(this + " :: " + gameHandler.getTick());
-//            System.out.println(currentTarget);
+            //System.out.println(currentTarget);
             switch (state) {
                 case idle:
                     if(velocity != null) {
@@ -67,11 +79,11 @@ public abstract class AgentBasic implements Runnable {
                     onMoving();
                     break;
             }
-            sleepFor(15);
+            updatePosition();
+            waitFor(Agent.agentW8Stop, 25);
         }
     }
 
-    protected abstract void recalculatePath(int times);
     /**
      * when the agent has stopped, a.k.a he is on the Node without destination
      */
@@ -90,28 +102,24 @@ public abstract class AgentBasic implements Runnable {
             return;
         }
 
-        if(src == currentTarget.getSrc()){
+        if(src == getCurrentTarget().getSrc()){
             if(onFinalEdge()){
                 return;
             }
         }
 
-        if(targetNotMine()){
-            removeTarget();
-            getNextTarget();
-            return;
-        }
-
-        waitFor(this, 25);
-        // we landed on a cross road.
+        waitFor(this, 15);
         if(velocity == null) {
             sleepFor(10);
             if(velocity == null) {
                 changeState(State.idle);
             }
-            //recalculatePath();
-            //gameHandler.doMove();
         }
+        //waitFor(this, 50);
+    }
+
+    public Pokemon getCurrentTarget(){
+        return currentTarget;
     }
 
     /**
@@ -123,9 +131,10 @@ public abstract class AgentBasic implements Runnable {
     protected abstract void getNextTarget();
 
     private boolean onFinalEdge(){
-        if (pos.checkExtraClose(currentTarget.getPos(), 2)) {
-            System.out.println("Eating");
+        if (pos.checkExtraClose(getCurrentTarget().getPos(), 0)) {
+            //System.out.println("Eating");
             //System.out.println(currentTarget);
+            //sleepFor(5);
             gameHandler.forceMove();
             sleepFor(5);
             currentTarget = null;
@@ -136,8 +145,8 @@ public abstract class AgentBasic implements Runnable {
     }
 
     /**
-     * We update all the relevant data of the agent, based on the query provided by the server.
-     * @param agentObj
+     * We updateAll overlapping the relevant data of the agent, based on the query provided by the server.
+     * @param agentObj JSON Object with the agent data
      * @throws JSONException
      */
     public void updateFromJson(JSONObject agentObj) throws JSONException {
@@ -147,7 +156,7 @@ public abstract class AgentBasic implements Runnable {
         src = agentObj.getInt("src");
         var dest = agentObj.getInt("dest");
         var speed = agentObj.getDouble("speed");
-        var p = Pos3D.fromString(agentObj.getString("pos"));
+        var p = Vector3D.fromString(agentObj.getString("pos"));
         if(this.speed != speed || this.dest != dest){
             this.speed = speed;
             this.dest = dest;
@@ -204,8 +213,8 @@ public abstract class AgentBasic implements Runnable {
         var target = graph.getNode(dest);
         edge = graph.getEdge(src, dest);
 
-        dest_pos = new Pos3D(target.getLocation());
-        var source_pos = new Pos3D(graph.getNode(src).getLocation());
+        dest_pos = new Vector3D(target.getLocation());
+        var source_pos = new Vector3D(graph.getNode(src).getLocation());
 
 
         var max_length = source_pos.distance(dest_pos);
@@ -236,17 +245,23 @@ public abstract class AgentBasic implements Runnable {
         }
     }
 
-    protected int getDestiny(){
-        return hasTarget() ? currentTarget.getDest() : src;
-    }
-
     protected Pokemon getTarget(){
         return currentTarget;
     }
 
-    public boolean targetNotMine(){
-        return !(hasTarget() && currentTarget.agent() == this);
+    /**
+     * check if target valid
+     * @return true if target valid
+     */
+    public boolean updateTarget(){
+        if(!(hasTarget() && currentTarget.agent() == this)){
+            removeTarget();
+            getNextTarget();
+            return true;
+        }
+        return false;
     }
+
 
     public boolean hasTarget(){
         return currentTarget != null;
@@ -256,6 +271,11 @@ public abstract class AgentBasic implements Runnable {
         currentTarget = null;
     }
 
+    /**
+     * set the next target pokemon
+     * @param target chosen pokemon
+     * @param distance distance to pokemon
+     */
     protected void setTarget(Pokemon target, double distance){
         if(target == null){
             currentTarget = null;
@@ -268,16 +288,24 @@ public abstract class AgentBasic implements Runnable {
         }
     }
 
+    /**
+     * change the state
+     * @param newState
+     */
     private synchronized void changeState(State newState){
         this.state = newState;
         wakeMeUp();
     }
 
+    /**
+     * check if the target still valid, on server update
+     */
     public void evaluateTarget(){
         if(!hasTarget()){
             getNextTarget();
             return;
         }
+
         var target = currentTarget;
         currentTarget.setAgent(null, 0);
         getNextTarget();
@@ -294,7 +322,7 @@ public abstract class AgentBasic implements Runnable {
         }
     }
 
-    public Pos3D getVelocity() {
+    public Vector3D getVelocity() {
         return velocity;
     }
 
@@ -310,11 +338,11 @@ public abstract class AgentBasic implements Runnable {
         return src;
     }
 
-    public Pos3D getPos() {
+    public Vector3D getPos() {
         return pos;
     }
 
-    public Pos3D getDest_pos() {
+    public Vector3D getDest_pos() {
         return dest_pos;
     }
 

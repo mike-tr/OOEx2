@@ -4,9 +4,11 @@ import api.node_data;
 import implementation.MyHeap.IHeapNode;
 
 public class WPathNode extends IHeapNode {
-    // this is a node object, it implements IHeapNode with is an interface
-    // that lets me set the "parent heap" set priority, and Compare 2 node objects.
-    // the priority would be used as the Distance.
+    /**
+     *  this is a node object, it implements IHeapNode with is an interface
+     *  that lets me set the "head heap" set priority, and Compare 2 node objects.
+     *  the priority would be used as the Distance.
+     */
     private node_data node;
     private WPathNode parent;
     private double distance;
@@ -21,7 +23,7 @@ public class WPathNode extends IHeapNode {
     }
 
     public WPathNode getParent(){
-        // get the parent, a.k.a the node we came.
+        // get the head, a.k.a the node we came.
         return parent;
     }
 
@@ -34,7 +36,7 @@ public class WPathNode extends IHeapNode {
     }
 
     public void setParent(WPathNode root){
-        // set the parent of this Node, for traversal.
+        // set the head of this Node, for traversal.
         this.parent = root;
     }
 

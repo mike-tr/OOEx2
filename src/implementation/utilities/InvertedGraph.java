@@ -9,6 +9,9 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 
+/**
+ * this graph creates an inverted graph with inverted edges out of any directed weighted graph
+ */
 public class InvertedGraph implements directed_weighted_graph {
     public static final class Inverter {
         private Inverter() {}

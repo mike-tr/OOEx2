@@ -10,6 +10,9 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 
+/**
+ * transform a weighted graph into the json version
+ */
 public class JsonGraph {
     public JsonEdge[] Edges = new JsonEdge[0];
     public JsonNode[] Nodes = new JsonNode[0];

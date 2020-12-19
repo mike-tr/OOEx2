@@ -5,6 +5,9 @@ import api.geo_location;
  * This class represents a 2D Range, composed from two 1D Ranges.
  */
 public class Range2D {
+	/**
+	 * IAM NOT USING THIS
+	 */
 	private Range _y_range;
 	private Range _x_range;
 	
