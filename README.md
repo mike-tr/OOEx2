@@ -54,6 +54,34 @@ and O(log n) update key.
 ### Ingame footage
   ![Image of graph ds methods](https://media0.giphy.com/media/MgY5wtOTRZDscUiLdJ/giphy.gif)
   
+### Scores per level
+| Level        | Grade          | Moves made    |
+|   :---:      |     :---:      |      :---:    |
+| 0            | 147            | 83            |
+| 1            | 578            | 334           |
+| 2            | 363            | 165           |
+| 3            | 942            | 383           |
+| 4            | 356            | 155           |
+| 5            | 848            | 344           |
+| 6            | 79             | 52            |
+| 7            | 437            | 280           |
+| 8            | 130            | 87            |
+| 9            | 511            | 312           |
+| 10           | 169            | 95            |
+| 11           | 2483           | 558           |
+| 12           | 66             | 53            |
+| 13           | 465            | 360           |
+| 14           | 187            | 122           |
+| 15           | 310            | 237           |
+| 16           | 264            | 127           |
+| 17           | 1261           | 471           |
+| 18           | 40             | 44            |
+| 19           | 392            | 359           |
+| 20           | 255            | 161           |
+| 21           | 307            | 264           |
+| 22           | 240            | 144           |
+| 23           | 1283           | 474           |
+
 
 ### UI Classes
 ![Image of graph algo constructors](https://github.com/miko-t/OOEx2/blob/main/res/Part2_Graphics.png?raw=true)
