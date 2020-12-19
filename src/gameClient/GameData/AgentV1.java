@@ -2,6 +2,9 @@ package gameClient.GameData;
 
 import java.util.ArrayList;
 
+/**
+ * Version 1 of the agent, uses straight forward path finding
+ */
 public class AgentV1 extends AgentBasic {
     /**
      * OLD implementation of agent this one uses straight Path finding, its worse in most cases

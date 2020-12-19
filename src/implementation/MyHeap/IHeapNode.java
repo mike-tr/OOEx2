@@ -1,5 +1,8 @@
 package implementation.MyHeap;
 
+/**
+ * abstract IHeapNode, has the basic functions to work with the heap
+ */
 public abstract class IHeapNode {
     private int index = -1;
     private Heap heap;

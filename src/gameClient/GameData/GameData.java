@@ -3,6 +3,9 @@ package gameClient.GameData;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+/**
+ * class that reads the server data and transform it into a readable class
+ */
 public class GameData {
     public int agents = 0;
     public int pokemons = 0;
@@ -11,7 +14,6 @@ public class GameData {
     public int grade = 0;
 
     /**
-     * class that reads the server data and transform it into a readable class
      * @param json the json string
      */
     public GameData(String json){

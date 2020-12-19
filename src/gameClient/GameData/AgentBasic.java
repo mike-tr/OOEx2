@@ -11,7 +11,9 @@ import org.json.JSONObject;
 
 import java.util.List;
 
-
+/**
+ * Base Agent, implements all the basic functions that we share with all agents
+ */
 public abstract class AgentBasic implements Runnable {
     enum State {
         idle,

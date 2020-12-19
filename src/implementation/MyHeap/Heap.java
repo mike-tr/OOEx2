@@ -35,6 +35,9 @@ public class Heap<T extends IHeapNode> {
         items = (T[])new IHeapNode[size];
     }
 
+    /**
+     * A lock object that lets some methods communicate with the heap as public but blocks for everything else.
+     */
     public static final class HeapLock {
         private HeapLock() {}
     }

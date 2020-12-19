@@ -1,8 +1,10 @@
 package gameClient.GameData;
 
+/**
+ * the main Agent just Extends some version
+ */
 public class Agent extends AgentVG {
     /**
-     * This class is just responsible for choosing the Agent implementation, in case we have multiple of them.
      * @param gameHandler the game manager
      * @param id the id of the agent
      * @param src the starting position ( default if no pokemon )

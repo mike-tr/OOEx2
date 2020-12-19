@@ -3,6 +3,10 @@ package implementation;
 import api.node_data;
 import implementation.MyHeap.IHeapNode;
 
+/**
+ * Path node, implements IHeapNode, worth with my heap,
+ * Hold's reference to the "parent" node, and the node we came from, for easy path retrieval
+ */
 public class WPathNode extends IHeapNode {
     /**
      *  this is a node object, it implements IHeapNode with is an interface

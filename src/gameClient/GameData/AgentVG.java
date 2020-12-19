@@ -2,6 +2,9 @@ package gameClient.GameData;
 
 import java.util.Comparator;
 
+/**
+ * Version 2 of agent uses Groups of pokemons and path finding a.k.a its smarter
+ */
 public class AgentVG extends AgentBasic {
 
     PokaGroup group;

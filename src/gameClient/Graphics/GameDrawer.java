@@ -10,6 +10,9 @@ import java.awt.*;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 
+/**
+ * Draw everything, to the pain a.k.a Graph + Pokemon + Agent drawers
+ */
 public class GameDrawer extends JPanel {
     int width, height;
     int x = 0;

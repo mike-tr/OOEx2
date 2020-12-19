@@ -5,6 +5,9 @@ import gameClient.utilities.PosTransformer;
 
 import java.awt.*;
 
+/**
+ * Draw the agents to the pain.
+ */
 public class AgentDrawer {
     private PokemonGameData gameHandler;
     private PosTransformer transformer;

@@ -3,6 +3,9 @@ package gameClient.GameData;
 import java.util.ArrayList;
 import java.util.Comparator;
 
+/**
+ * A Group of pokemons that are on the same edge, also getting connected to adjacent groups
+ */
 public class PokaGroup {
     private static int next_id = 0;
 

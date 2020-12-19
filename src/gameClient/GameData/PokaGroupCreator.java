@@ -2,6 +2,9 @@ package gameClient.GameData;
 
 import java.util.ArrayList;
 
+/**
+ * Manager for PokaGroups, its responsible for updating everything related to pokemons
+ */
 public class PokaGroupCreator {
 
     public ArrayList<PokaGroup> pokaGroups = new ArrayList<>();

@@ -16,6 +16,9 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Comparator;
 
+/**
+ * This is the GameManager, holding all the data, and handling server updates
+ */
 public class PokemonGameData implements Runnable{
     private int tick;
     private int movesMade;

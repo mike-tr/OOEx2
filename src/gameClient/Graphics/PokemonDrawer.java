@@ -6,6 +6,9 @@ import gameClient.utilities.*;
 
 import java.awt.*;
 
+/**
+ * draw the pokemons on the pane
+ */
 public class PokemonDrawer {
 
     private PokemonGameData gameHandler;

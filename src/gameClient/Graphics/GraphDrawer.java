@@ -9,6 +9,9 @@ import gameClient.utilities.PosTransformer;
 
 import java.awt.*;
 
+/**
+ * Draw the graph, to the pane
+ */
 public class GraphDrawer {
     private directed_weighted_graph graph;
     private PosTransformer transformer;

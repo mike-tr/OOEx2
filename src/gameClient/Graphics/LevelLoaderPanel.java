@@ -5,6 +5,9 @@ import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.*;
 
+/**
+ * The level loader UI, and login function
+ */
 public class LevelLoaderPanel extends JPanel implements ActionListener {
     public interface levelPickedListener{
         void setLevel(int level, int id);

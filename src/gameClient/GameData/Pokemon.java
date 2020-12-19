@@ -7,6 +7,9 @@ import implementation.Vector3D;
 
 import java.util.Iterator;
 
+/**
+ * Pokemon data implementation
+ */
 public class Pokemon{
     private Vector3D pos;
     private Vector3D look;

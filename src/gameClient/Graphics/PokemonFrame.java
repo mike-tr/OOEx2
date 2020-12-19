@@ -9,6 +9,9 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 
+/**
+ * The main frame, with is the actual window, with the ui etc...
+ */
 public class PokemonFrame extends JFrame implements LevelLoaderPanel.levelPickedListener, Runnable, IMain {
     private boolean running = true;
     private int frames = 60;

@@ -2,6 +2,10 @@ package implementation;
 
 import api.geo_location;
 
+/**
+ * Vector3D hold x,y,z as well as mathematical functions vectors add/subtract multiply by scalar
+ * get normalized distance etc...
+ */
 public class Vector3D implements geo_location {
     public static final double EPS1 = 0.001, EPS2 = 0.0003, EPS3 = 0.003, EPS4 = 0.0001;
 

@@ -2,6 +2,9 @@ package gameClient;
 
 import gameClient.Graphics.PokemonFrame;
 
+/**
+ * Main pragma
+ */
 public class Ex2 {
     static PokemonFrame game;
     public static void main(String[] args) {
