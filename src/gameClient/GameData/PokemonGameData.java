@@ -32,21 +32,21 @@ public class PokemonGameData implements Runnable{
 
     private int forcedMoves = 0;
 
-    private IMain mainProgra;
+    private IMain mainPragma;
 
     private PokaGroupCreator pokaGroupCreator;
 
     private GameData gameData;
-    private boolean initialized = false;
+    private boolean initialized;
     /**
      * This class is basically the game, it would communicate with the server.
      * start the game, initialize everything and call updates.
      * @param level the level of the game
-     * @param mainProgra the exit object it will notify on end
+     * @param mainPragma the exit object it will notify on end
      */
-    public PokemonGameData(int level, int id, IMain mainProgra){
+    public PokemonGameData(int level, int id, IMain mainPragma){
         System.out.println("--------------------------- Initializing --------------------------------");
-        this.mainProgra = mainProgra;
+        this.mainPragma = mainPragma;
         game = Game_Server_Ex2.getServer(level);
         if(id != -1) {
             game.login(id);
@@ -125,7 +125,8 @@ public class PokemonGameData implements Runnable{
             System.out.println("--------------------------------------------------------------------");
             game.stopGame();
             finished = true;
-            mainProgra.hasStopped(this);
+            Thread.sleep(10000);
+            mainPragma.hasStopped(this);
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -134,10 +135,6 @@ public class PokemonGameData implements Runnable{
     int last = -10;
     int last2 = -10;
 
-    boolean updating = false;
-    public boolean w8ingUpdate(){
-        return updating;
-    }
     /**
      * Forced move, this would be called from an agent we would do the move iff no other move was made this tick.
      */
@@ -146,7 +143,6 @@ public class PokemonGameData implements Runnable{
             return;
         }
         System.out.println("FORCED MOVE - " + tick);
-        updating = true;
         game.move();
         forcedMoves++;
         movesMade++;
@@ -159,10 +155,8 @@ public class PokemonGameData implements Runnable{
         }catch (Exception e) {
 
         }
-
         last = tick;
         last2 = last;
-        updating = false;
         synchronized (Agent.agentW8Stop) {
             Agent.agentW8Stop.notifyAll();
         }
@@ -192,7 +186,6 @@ public class PokemonGameData implements Runnable{
     private void move() throws Exception{
         System.out.println("Request granted doing move " + tick);
         move = false;
-        updating = true;
         game.move();
         last2 = tick;
         movesMade++;
@@ -201,7 +194,6 @@ public class PokemonGameData implements Runnable{
         Thread.sleep(5);
         getAgentsFromServer();
         getPokemonsFromServer();
-        updating = false;
         synchronized (Agent.agentW8Stop) {
             Agent.agentW8Stop.notifyAll();
         }
