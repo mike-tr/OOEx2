@@ -67,6 +67,25 @@ public class DWGraph_DSTest {
         assertEquals(7,g.nodeSize());
     }
 
+    @Test
+    public void testConnect(){
+        directed_weighted_graph g = graph_creator(10,0);
+        assertEquals(10,g.nodeSize());
+        for (int i = 1; i < 10; i++) {
+            g.connect(i,i-1,i);
+        }
+        assertEquals(g.edgeSize(), 9);
+        assertEquals(g.getMC(), 19);
+        for (int i = 1; i < 10; i++) {
+            g.connect(i,i-1,i);
+        }
+        assertEquals(g.getMC(), 19);
+        for (int i = 1; i < 10; i++) {
+            g.connect(i,i-1,i+1);
+        }
+        assertEquals(g.getMC(), 28);
+    }
+
     /**
      * Test graph's edgeSize() method.
      */

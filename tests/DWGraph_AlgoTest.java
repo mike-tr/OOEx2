@@ -98,22 +98,6 @@ public class DWGraph_AlgoTest {
 
     }
 
-    public void test(){
-        directed_weighted_graph g = graph_creator(1000,1000);
-        dw_graph_algorithms algo = new DWGraph_Algo(g);
-
-        double distance = algo.shortestPathDist(0,100);
-        List<node_data> path = algo.shortestPath(0,100);
-        boolean is_fully_connected = algo.isConnected();
-
-        directed_weighted_graph copy = algo.copy();
-        algo.init(copy);
-        algo.save("filename");
-        algo.load("filename");
-
-        directed_weighted_graph loaded = algo.getGraph();
-    }
-
     @Test
     public void graphPathTest(){
         directed_weighted_graph graph = new DWGraph_DS();

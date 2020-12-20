@@ -145,9 +145,12 @@ public class DWGraph_DS implements directed_weighted_graph{
             if(getNode(dest) == null){
                 return;
             }
-            if(!edges.get(src).containsKey(dest)){
+            var e = edges.get(src).get(dest);
+            if(e == null){
                 flipped.get(dest).add(src);
                 edgeSize++;
+            }else if(e.getWeight() == w){
+                return;
             }
             edges.get(src).put(dest, new EdgeData(src, dest, w));
             mc++;
