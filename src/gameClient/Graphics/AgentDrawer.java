@@ -32,7 +32,7 @@ public class AgentDrawer {
             ((Graphics2D)g).setStroke(new BasicStroke(3));
             var pos = transformer.transformD(agent.getPos());
             g.setColor(Color.magenta);
-            g.drawString("AgentBasic : "+agent.getId(), (int)pos.x + 25, (int)pos.y-2);
+            g.drawString("Agent : "+agent.getId(), (int)pos.x + 25, (int)pos.y-2);
             g.drawOval((int)pos.x - size, (int)pos.y - size, size * 2, size * 2);
 
             if(agent.getVelocity() != null) {
